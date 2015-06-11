@@ -87,5 +87,6 @@ void update(struct game *g)
 	Uint32 delta = current_time - g->last_time;
 	g->last_time = current_time;
 
+	debug("Delta: %u\n", delta);
 	SDL_Delay(50);
 }

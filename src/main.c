@@ -18,10 +18,10 @@ int main(int argc, char **argv)
 	SDL_Event e;
 	struct game g;
 	init(&g, &w, &r);
-	while (g->running) {
+	while (g.running) {
 		while (SDL_PollEvent(&e))
 			get_event(&g, e);
-		SDL_GetWindowSize(w, &g->width, &g->height);
+		SDL_GetWindowSize(w, &g.width, &g.height);
 		update(&g);
 		render(&g, r);
 	}

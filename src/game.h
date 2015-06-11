@@ -27,14 +27,14 @@ void update(struct game *g);
  * Error macros for errors, warnings, debug
  */
 #define error(str, ...) { \
-		fprintf(stderr, "<ERROR> in %s at line %i in %s: ", __FILE__, __func__, __LINE__); \
+		fprintf(stderr, "<ERROR> in %s at line %i in %s: ", __FILE__, __LINE__, __func__); \
 		fprintf(stderr, str, ##__VA_ARGS__); \
 		exit(EXIT_FAILURE); }
 #define warning(str, ...) { \
-		fprintf(stderr, "<WARNING> in %s at line %i in %s: ", __FILE__, __func__, __LINE__); \
+		fprintf(stderr, "<WARNING> in %s at line %i in %s: ", __FILE__, __LINE__, __func__); \
 		fprintf(stderr, str, ##__VA_ARGS__); }
 #define debug(str, ...) { \
-		fprintf(stderr, "<DEBUG> in %s at line %i in %s: ", __FILE__, __func__, __LINE__); \
+		fprintf(stderr, "<DEBUG> in %s at line %i in %s: ", __FILE__, __LINE__, __func__); \
 		fprintf(stderr, str, ##__VA_ARGS__); }
 #define memchk(DATA) { \
 		if ((DATA) == NULL) \
