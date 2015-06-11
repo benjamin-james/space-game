@@ -19,12 +19,12 @@ void game_init(struct game *g, render_func renderer, update_func updater, event_
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		error("SDL_Init failed: %s\n", SDL_GetError());
 	g->window = SDL_CreateWindow("Space Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_RESIZABLE);
-	if (!g->w)
+	if (!g->window)
 		error("Could not create window: %s\n", SDL_GetError());
 	g->renderer = SDL_CreateRenderer(g->window, -1, 0);
-	if (!g->r)
+	if (!g->renderer)
 		error("Could not create renderer: %s\n", SDL_GetError());
-	SDL_GetWindowSize(g->w, &g->width, &g->height);
+	SDL_GetWindowSize(g->window, &g->width, &g->height);
 	g->last_time = SDL_GetTicks();
 	g->render = renderer;
 	g->update = updater;
@@ -40,13 +40,13 @@ void game_loop(struct game *g)
 	SDL_Event e;
 	Uint32 current_time = SDL_GetTicks();
 	while (SDL_PollEvent(&e))
-		g->get_event(&g, e);
+		g->get_event(g, e);
 	g->update(g, current_time - g->last_time);
 
-	SDL_SetRenderDrawColor(r, 0xFF, 0xFF, 0xFF, 0xFF);
-	SDL_RenderClear(r);
-	g->render(g, r);
-	SDL_RenderPresent(r);
+	SDL_SetRenderDrawColor(g->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_RenderClear(g->renderer);
+	g->render(g);
+	SDL_RenderPresent(g->renderer);
 
 	g->last_time = current_time;
 	SDL_Delay(50);
@@ -106,7 +106,7 @@ void default_get_event(struct game *g, SDL_Event event)
  * main render function but implemented
  * in another file.
  */
-void default_render(struct game *g, SDL_Renderer *r)
+void default_render(struct game *g)
 {
 	/* DRAW STUFF */
 }
@@ -119,9 +119,4 @@ void default_render(struct game *g, SDL_Renderer *r)
 void default_update(struct game *g, Uint32 delta)
 {
 
-<<<<<<< HEAD
-=======
-	debug("Delta: %u\n", delta);
-	SDL_Delay(50);
->>>>>>> b0545d2e6cb1936c0cca2ff47491fcbea504a25f
 }

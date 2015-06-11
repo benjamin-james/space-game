@@ -12,10 +12,6 @@
  * generic until things work.
  */
 
-typedef void (*render_func)(struct game *g);
-typedef void (*update_func)(struct game *g, Uint32 delta);
-typedef void (*event_func)(struct game *g, SDL_Event e);
-
 struct game {
 	void *data;
 	int width, height;
@@ -25,17 +21,21 @@ struct game {
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 
-	render_func render;
-	update_func update;
-	event_func get_event;
+	void (*render)(struct game *g);
+	void (*update)(struct game *g, Uint32 delta);
+	void (*get_event)(struct game *g, SDL_Event event);
 };
+
+typedef void (*render_func)(struct game *g);
+typedef void (*update_func)(struct game *g, Uint32 delta);
+typedef void (*event_func)(struct game *g, SDL_Event e);
 
 void game_init(struct game *g, render_func renderer, update_func updater, event_func event_getter);
 void game_loop(struct game *g);
 void game_destroy(struct game *g);
 
 void default_get_event(struct game *g, SDL_Event event);
-void default_render(struct game *g, SDL_Renderer *r);
+void default_render(struct game *g);
 void default_update(struct game *g, Uint32 delta);
 
 /*
