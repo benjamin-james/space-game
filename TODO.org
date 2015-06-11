@@ -20,17 +20,33 @@
    - [ ] Allow mouse to select tiles to move to / use action on
    - [ ] Create mouse-driven mouse interface
 
-
 * TODO Combat
 ** Units [0/7]
-   - [ ] Design coordinate system for use of determining position and distance from other units.
+   = [ ] Figure out an objective for each battle
+   - [ ] Design coordinate system for use of determining position and distance from other units
    - [ ] Bind struct of stats to each unit
    - [ ] Bind an small inventory to each unit
    - [ ] Increase these stats upon a level up
-   - [ ] Calculate damage and hit chance given two units and the distance between them
+   - [ ] Calculate damage and hit chance given two units and the distance between them for both manual and auto attack
    - [ ] Calculate experience values given two units
    - [ ] Calculate and show possible moving distance
+   - [ ] Figure out vision range given all allied units
+   - [ ] Balance the giant carrier ships
+   - [ ] Create and implement the carrier with seperately disableable subsystems (weapons, shields, engines...)
 
-** Map [0/2]
+** Map [0/3]
    - [ ] Design necessary maps
    - [ ] Create start positions
+   - [ ] Give some kind of difficulty rating for each map
+
+* TODO Management
+** Shop [0/3]
+   - [ ] Create items with specific statistics
+   - [ ] Create money / resource system
+   - [ ] Implement buying / selling
+
+** Fleet Management Screen [0/4]
+   - [ ] Create a menu to manage all the units in the fleet
+   - [ ] Show specifc unit info
+   - [ ] Show unit stats in list
+   - [ ] Show unit inventory in list
