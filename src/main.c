@@ -21,7 +21,7 @@ int main(int argc, char **argv)
 	game_init(&g);
 	game_set_render_func(&g, render);
 	game_set_update_func(&g, update);
-	game_set_key_event_func(&g, key_event);
+	game_set_key_func(&g, key_event);
 	game_set_mouse_moved_func(&g, mouse_moved);
 	game_set_mouse_clicked_func(&g, mouse_clicked);
 	while (g.running)

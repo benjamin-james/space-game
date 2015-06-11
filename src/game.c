@@ -80,14 +80,14 @@ void default_get_event(struct game *g, SDL_Event event)
 		}
 		break;
 	case SDL_KEYDOWN:
-		g->key_event(g, event.key.keysym.sym, event.key.status);
+		g->key_event(g, event.key.keysym.sym, event.key.state);
 		break;
 	case SDL_MOUSEMOTION:
 		g->mouse_motion_event(g, event.motion);
 		break;
 	case SDL_MOUSEBUTTONDOWN:
 	case SDL_MOUSEBUTTONUP:
-		g->mouse_button_event(g, event.motion);
+		g->mouse_button_event(g, event.button);
 		break;
 	case SDL_QUIT:
 		g->running = 0;
