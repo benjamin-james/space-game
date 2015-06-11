@@ -11,17 +11,32 @@
  * to store all game data. It is
  * generic until things work.
  */
+
+typedef void (*render_func)(struct game *g);
+typedef void (*update_func)(struct game *g, Uint32 delta);
+typedef void (*event_func)(struct game *g, SDL_Event e);
+
 struct game {
 	void *data;
 	int width, height;
 	volatile int running;
 	Uint32 last_time;
+
+	SDL_Window *window;
+	SDL_Renderer *renderer;
+
+	render_func render;
+	update_func update;
+	event_func get_event;
 };
 
-void init(struct game *g, SDL_Window **w, SDL_Renderer **r);
-void get_event(struct game *g, SDL_Event e);
-void render(struct game *g, SDL_Renderer *r);
-void update(struct game *g);
+void game_init(struct game *g, render_func renderer, update_func updater, event_func event_getter);
+void game_loop(struct game *g);
+void game_destroy(struct game *g);
+
+void default_get_event(struct game *g, SDL_Event event);
+void default_render(struct game *g, SDL_Renderer *r);
+void default_update(struct game *g, Uint32 delta);
 
 /*
  * Error macros for errors, warnings, debug
