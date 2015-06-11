@@ -12,8 +12,11 @@ Makefile.in
 /install-sh
 /Makefile
 /missing
-/sdlgame
+/space_game
 /stamp-h1
+*/space_game
+*.deps
+*/Makefile
 *.o
 \#*
 .#*
