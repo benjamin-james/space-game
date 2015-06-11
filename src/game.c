@@ -119,4 +119,9 @@ void default_render(struct game *g, SDL_Renderer *r)
 void default_update(struct game *g, Uint32 delta)
 {
 
+<<<<<<< HEAD
+=======
+	debug("Delta: %u\n", delta);
+	SDL_Delay(50);
+>>>>>>> b0545d2e6cb1936c0cca2ff47491fcbea504a25f
 }
