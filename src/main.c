@@ -1,3 +1,4 @@
+#include "stdio.h"
 #include "stdlib.h"
 #include "time.h" /* for time() */
 
@@ -9,6 +10,7 @@
  */
 
 volatile int running = 1;
+int width, height;
 
 /*
  * Let's please use documentation
@@ -20,6 +22,9 @@ void get_event(SDL_Event e);
 void render(SDL_Renderer *r);
 void update(Uint32 delta);
 
+/*
+ * The entry point
+ */
 int main(int argc, char **argv)
 {
 	SDL_Window *w;
@@ -31,13 +36,18 @@ int main(int argc, char **argv)
 	while (running) {
 		while (SDL_PollEvent(&e))
 			get_event(e);
+		SDL_GetWindowSize(w, &width, &height);
+
 		current_time = SDL_GetTicks();
 		update(current_time - last_time);
 		last_time = current_time;
+
 		SDL_SetRenderDrawColor(r, 0xFF, 0xFF, 0xFF, 0xFF);
 		SDL_RenderClear(r);
 		render(r);
 		SDL_RenderPresent(r);
+
+		SDL_Delay(50);
 	}
 	SDL_DestroyRenderer(r);
 	SDL_DestroyWindow(w);
@@ -55,14 +65,27 @@ int main(int argc, char **argv)
 void init(SDL_Window **w, SDL_Renderer **r)
 {
 	srand(time(0));
-	SDL_Init(SDL_INIT_EVERYTHING);
-	*w = SDL_CreateWindow("Space Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+		fprintf(stderr, "SDL_Init failed: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
+	*w = SDL_CreateWindow("Space Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_RESIZABLE);
+	if (!*w) {
+		fprintf(stderr, "Could not create window: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
 	*r = SDL_CreateRenderer(*w, -1, 0);
+	if (!*r) {
+		fprintf(stderr, "Could not create renderer: %s\n", SDL_GetError());
+		exit(EXIT_FAILURE);
+	}
 }
 
 /*
  * Function called every time an event happens,
- * so this should take care of each one.
+ * so this should take care of each one, or call
+ * another function to take care of a specific
+ * event.
  */
 void get_event(SDL_Event event)
 {
