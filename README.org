@@ -1,2 +1,14 @@
-* space-game
-I forgot already
+* General Info
+This game is a strategy RPG set in space, featuring strategic and challenging battles taking place across the reaches of the galaxy. Designed and constructed as a side summer project.
+Note that as this is still in development, any listed features may be removed, altered, or replaced with different mechanics.
+
+
+* Mechanics
+** Battles
+Control a small fleet of space fighters alongside a massive carrier in turn-based fights with an opposing force of equal or greater might. Train and upgrade your force as they gain
+experience from combat while also trying to keep your carrier alive.
+
+
+** Management
+Outside of the battles, repair any damage your fleet may have sustained, while also plotting a course to both evade the enemy onslaught while also investigating planets for upgrades
+or survivors. Invest in either pilot training or autopilot upgrades as you choose the style of battle your fleet will use. Both have advantages, but a commander must choose.

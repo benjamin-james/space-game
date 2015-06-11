@@ -1,2 +1,36 @@
-* TODO
-Everything
+* TODO I/O
+** Display [0/5]
+   - [ ] Render and display units
+   - [ ] Display background images
+   - [ ] Display HUD
+   - [ ] Display various menus when outside of battle
+   - [ ] Create visual assets to be used in the game
+   - [ ] Find a way to dynamically move camera around during combat
+
+** Audio [0/4]
+   - [ ] Music?
+   - [ ] Sync sound effects with actions in battle
+   - [ ] Sync sound effects with menu actions
+   - [ ] Find / develop sound effects
+
+** Input [0/5]
+   - [ ] Recognize keyboard input
+   - [ ] Create keybinds to various actions
+   - [ ] Create a way to rebind keys (?)
+   - [ ] Allow mouse to select tiles to move to / use action on
+   - [ ] Create mouse-driven mouse interface
+
+
+* TODO Combat
+** Units [0/7]
+   - [ ] Design coordinate system for use of determining position and distance from other units.
+   - [ ] Bind struct of stats to each unit
+   - [ ] Bind an small inventory to each unit
+   - [ ] Increase these stats upon a level up
+   - [ ] Calculate damage and hit chance given two units and the distance between them
+   - [ ] Calculate experience values given two units
+   - [ ] Calculate and show possible moving distance
+
+** Map [0/2]
+   - [ ] Design necessary maps
+   - [ ] Create start positions
