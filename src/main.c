@@ -30,17 +30,22 @@ int main(int argc, char **argv)
 	return 0;
 }
 
+/*
+ * This function is in need of cleanup
+ * especially for errors.
+ */
 void render(struct game *g)
 {
-	int p = GRID_NORMAL_SIZE * g->zoom / 100.0;
-	int num_tiles_w = g->width / p;
-	int num_tiles_h = g->height / p;
+	int px = (int)((g->width / GRID_NORMAL_SIZE) * g->zoom / 100.0);
+	int py = (int)((g->height / GRID_NORMAL_SIZE) * g->zoom / 100.0);
+	int num_tiles_w = 1 + g->width / px;
+	int num_tiles_h = 1 + g->height / py;
 
 	int i,j;
 	for (i = 0; i < num_tiles_w; i++) {
 		for (j = 0; j < num_tiles_h; j++) {
-			SDL_Rect current = {i * p, j * p, p, p};
-			Uint32 color = g->grid[i + g->cx][j + g->cy];
+			SDL_Rect current = {i * px, j * py, px, py};
+			Uint32 color = g->grid[i + g->cx - num_tiles_w / 2][j + g->cy - num_tiles_h / 2];
 			SDL_SetRenderDrawColor(g->renderer, (color >> 24) & 0xFF, (color >> 16) & 0xFF, (color >> 8) & 0xFF, 0xFF);
 			SDL_RenderFillRect(g->renderer, &current);
 			SDL_SetRenderDrawColor(g->renderer, 0, 0, 0, 0xFF);
@@ -50,7 +55,7 @@ void render(struct game *g)
 }
 void update(struct game *g, Uint32 delta)
 {
-
+	SDL_GetWindowSize(g->window, &g->width, &g->height);
 }
 
 /*

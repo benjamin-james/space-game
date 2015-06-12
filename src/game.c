@@ -33,7 +33,8 @@ void game_init(struct game *g)
 			g->grid[i][j] = ((rand() % 0xFFFF) << 16) | (rand() % 0xFF << 8);
 		}
 	}
-	g->cx = g->cy = 0;
+	g->cx = GRID_WIDTH / 2;
+	g->cy = GRID_HEIGHT / 2;
 }
 
 /*

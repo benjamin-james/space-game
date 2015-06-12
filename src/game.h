@@ -10,6 +10,7 @@
 #define GRID_WIDTH 100
 #define GRID_HEIGHT 100
 #define GRID_NORMAL_SIZE 20 /* in pixels */
+
 /*
  * We probably need some way
  * to store all game data. It is
