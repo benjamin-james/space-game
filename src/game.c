@@ -49,7 +49,7 @@ void game_loop(struct game *g)
 		default_get_event(g, e);
 	g->update(g, current_time - g->last_time);
 
-	SDL_SetRenderDrawColor(g->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_SetRenderDrawColor(g->renderer, 0, 0, 0, 0xFF);
 	SDL_RenderClear(g->renderer);
 	g->render(g);
 	SDL_RenderPresent(g->renderer);

@@ -11,14 +11,14 @@ AC_PROG_CC
 
 AC_CHECK_LIB([SDL2], [SDL_Init])
 #AC_CHECK_LIB([SDL2_gfx], [filledCircleColor])
-#AC_CHECK_LIB([m], [sqrt])
+AC_CHECK_LIB([m], [sqrt])
 
 # Checks for header files.
 
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
-#AC_CHECK_FUNCS([sqrt])
+AC_CHECK_FUNCS([sqrt])
 
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
