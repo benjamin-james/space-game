@@ -1,3 +1,5 @@
+#include "math.h"
+
 #include "SDL2/SDL.h"
 
 #include "game.h"
@@ -35,14 +37,14 @@ void render(struct game *g)
 	int i,j, sx, sy;
 	for (i = 0, sx = (g->width - tile_size_x) / 2; i < (num_tiles_w + 1)/ 2; i++, sx += tile_size_x) {
 		for (j = 0, sy = (g->height - tile_size_y) / 2; j < (num_tiles_h + 1) / 2; j++, sy += tile_size_y)
-			draw_rect(g->renderer, g->grid[g->cx + i][g->cy + j], sx, sy, tile_size_x, tile_size_y);
+			draw_rect(g->renderer, g->grid[g->cx + i][g->cy + j], sx-1, sy-1, round(tile_size_x)+1, round(tile_size_y)+1);
 		for (j = 0, sy = (g->height - tile_size_y) / 2; j < (num_tiles_h + 1) / 2; j++, sy -= tile_size_y)
-			draw_rect(g->renderer, g->grid[g->cx + i][g->cy + j], sx, sy, tile_size_x, tile_size_y);
+			draw_rect(g->renderer, g->grid[g->cx + i][g->cy - j], sx-1, sy-1, round(tile_size_x)+1, round(tile_size_y)+1);
 	}
 	for (i = 0, sx = (g->width - tile_size_x) / 2; i < (num_tiles_w + 1)/ 2; i++, sx -= tile_size_x) {
 		for (j = 0, sy = (g->height - tile_size_y) / 2; j < (num_tiles_h + 1) / 2; j++, sy += tile_size_y)
-			draw_rect(g->renderer, g->grid[g->cx + i][g->cy + j], sx, sy, tile_size_x, tile_size_y);
+			draw_rect(g->renderer, g->grid[g->cx - i][g->cy + j], sx-1, sy-1, round(tile_size_x)+1, round(tile_size_y)+1);
 		for (j = 0, sy = (g->height - tile_size_y) / 2; j < (num_tiles_h + 1) / 2; j++, sy -= tile_size_y)
-			draw_rect(g->renderer, g->grid[g->cx + i][g->cy + j], sx, sy, tile_size_x, tile_size_y);
+			draw_rect(g->renderer, g->grid[g->cx - i][g->cy - j], sx-1, sy-1, round(tile_size_x)+1, round(tile_size_y)+1);
 	}
 }
