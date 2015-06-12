@@ -26,6 +26,14 @@ void game_init(struct game *g)
 		error("Could not create renderer: %s\n", SDL_GetError());
 	SDL_GetWindowSize(g->window, &g->width, &g->height);
 	g->last_time = SDL_GetTicks();
+	g->zoom = 100.0;
+	int i,j;
+	for (i = 0; i < GRID_WIDTH; i++) {
+		for (j = 0; j < GRID_HEIGHT; j++) {
+			g->grid[i][j] = ((rand() % 0xFFFF) << 16) | (rand() % 0xFF << 8);
+		}
+	}
+	g->cx = g->cy = 0;
 }
 
 /*
@@ -78,6 +86,10 @@ void default_get_event(struct game *g, SDL_Event event)
 			SDL_GetWindowSize(g->window, &g->width, &g->height);
 			break;
 		}
+		break;
+	case SDL_MOUSEWHEEL:
+		debug("mouse wheel: %d\n", event.wheel.y);
+		g->zoom += 4*event.wheel.y;
 		break;
 	case SDL_KEYDOWN:
 		g->key_event(g, event.key.keysym.sym, event.key.state);

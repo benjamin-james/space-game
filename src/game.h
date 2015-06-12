@@ -6,6 +6,10 @@
 
 #include "SDL2/SDL.h"
 
+
+#define GRID_WIDTH 100
+#define GRID_HEIGHT 100
+#define GRID_NORMAL_SIZE 20 /* in pixels */
 /*
  * We probably need some way
  * to store all game data. It is
@@ -13,11 +17,16 @@
  */
 
 struct game {
+	Uint8 state;
 	void *data;
 	int width, height;
 	volatile int running;
 	Uint32 last_time;
 
+	Uint32 grid[GRID_WIDTH][GRID_HEIGHT];
+	int cx, cy; /* current x and y of grid */
+	double zoom;
+	/* These should rarely be modified */
 	SDL_Window *window;
 	SDL_Renderer *renderer;
 

@@ -32,7 +32,21 @@ int main(int argc, char **argv)
 
 void render(struct game *g)
 {
+	int p = GRID_NORMAL_SIZE * g->zoom / 100.0;
+	int num_tiles_w = g->width / p;
+	int num_tiles_h = g->height / p;
 
+	int i,j;
+	for (i = 0; i < num_tiles_w; i++) {
+		for (j = 0; j < num_tiles_h; j++) {
+			SDL_Rect current = {i * p, j * p, p, p};
+			Uint32 color = g->grid[i + g->cx][j + g->cy];
+			SDL_SetRenderDrawColor(g->renderer, (color >> 24) & 0xFF, (color >> 16) & 0xFF, (color >> 8) & 0xFF, 0xFF);
+			SDL_RenderFillRect(g->renderer, &current);
+			SDL_SetRenderDrawColor(g->renderer, 0, 0, 0, 0xFF);
+			SDL_RenderDrawRect(g->renderer, &current);
+		}
+	}
 }
 void update(struct game *g, Uint32 delta)
 {
@@ -46,7 +60,27 @@ void update(struct game *g, Uint32 delta)
  */
 void key_event(struct game *g, SDL_Keycode key, Uint8 state)
 {
-
+	if (state == SDL_RELEASED)
+		return;
+	switch(key) {
+	case SDLK_ESCAPE:
+		g->running = 0;
+		break;
+	case SDLK_LEFT:
+		g->cx--;
+		break;
+	case SDLK_UP:
+		g->cy--;
+		break;
+	case SDLK_RIGHT:
+		g->cx++;
+		break;
+	case SDLK_DOWN:
+		g->cy++;
+		break;
+	default:
+		break;
+	}
 }
 
 /*
