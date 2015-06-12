@@ -12,3 +12,13 @@ experience from combat while also trying to keep your carrier alive.
 ** Management
 Outside of the battles, repair any damage your fleet may have sustained, while also plotting a course to both evade the enemy onslaught while also investigating planets for upgrades
 or survivors. Invest in either pilot training or autopilot upgrades as you choose the style of battle your fleet will use. Both have advantages, but a commander must choose.
+
+* Build dependencies
+** A C compiler
+GCC and Clang should both work
+** GNU Autotools
+autoconf, automake, libtool
+** SDL2 development libraries
+including SDL2, SDL2_mixer, SDL2_image
+** A desire to play the game
+Have fun!
