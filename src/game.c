@@ -90,7 +90,25 @@ void default_get_event(struct game *g, SDL_Event event)
 		break;
 	case SDL_MOUSEWHEEL:
 		debug("mouse wheel: %d\n", event.wheel.y);
+	       	double tile_size_x = g->width * g->zoom / (GRID_NORMAL_SIZE * 100.0);
+		double tile_size_y = g->height * g->zoom / (GRID_NORMAL_SIZE * 100.0);
+		double num_tiles_w = g->width / tile_size_x;
+		double num_tiles_h = g->height / tile_size_y;
+
+		int old_cx, old_cy;
+		old_cx = round(num_tiles_w / 2.0);
+		old_cy = round(num_tiles_h / 2.0);
 		g->zoom += 4*event.wheel.y;
+
+		double n_tile_size_x = g->width * g->zoom / (GRID_NORMAL_SIZE * 100.0);
+		double n_tile_size_y = g->height * g->zoom / (GRID_NORMAL_SIZE * 100.0);
+		double n_tiles_w = g->width / n_tile_size_x;
+		double n_tiles_h = g->height / n_tile_size_y;
+		int n_cx, n_cy;
+		n_cx = round(n_tiles_w / 2.0);
+		n_cy = round(n_tiles_h / 2.0);
+		printf("old: %f %f %d %d new: %f %f %d %d\n", num_tiles_w, num_tiles_h, old_cx, old_cy, n_tiles_w, n_tiles_h, n_cx, n_cy);
+
 		break;
 	case SDL_KEYDOWN:
 		g->key_event(g, event.key.keysym.sym, event.key.state);
