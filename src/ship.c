@@ -37,7 +37,15 @@ int calc_move_range(struct ship thisShip) {
  * This will mostly be used in hit chance calculations.
  */
 int calc_dist (struct ship thisShip, struct ship otherShip) {
-	return (thisShip.x - otherShip.x) + (thisShip.y - otherShip.y);
+	int x = thisShip.x - otherShip.x;
+	int y = thisShip.y - otherShip.y;
+
+	if(x < 0)
+		x = -x;
+	if(y < 0)
+		y = -y;
+
+	return x + y;
 }
 
 /*
@@ -46,10 +54,12 @@ int calc_dist (struct ship thisShip, struct ship otherShip) {
  * May need rebalancing.
  */
 int calc_dmg (struct ship thisShip, struct ship otherShip, short manualFire) {
-	if(manualFire == 1) {
-		int avgDmg = calc_attack(thisShip) - calc_shield_strength(otherShip);
+	int avgDmg = calc_attack(thisShip) - calc_shield_strength(otherShip);
+	if(avgDmg < 0)
+		return 0;
+	if(manualFire == 1)
 		return (rand() * 0.4 * avgDmg) + (0.85 * avgDmg);
-	} else
+	else
 		return calc_attack(thisShip) - calc_shield_strength(otherShip);
 }
 
@@ -73,7 +83,7 @@ double calc_hit_chance (struct ship thisShip, struct ship otherShip, short manua
  * Returns -1 if a miss.
  */
 int handle_attack (struct ship *thisShip, struct ship *otherShip, short manualFire) {
-	if(rand() > calc_hit_chance(*thisShip, *otherShip, manualFire)) //If miss
+	if((double)rand() / RAND_MAX > calc_hit_chance(*thisShip, *otherShip, manualFire)) //If miss
 		return -1;
 
 	otherShip->shield.currentStrength -= calc_dmg(*thisShip, *otherShip, manualFire);
