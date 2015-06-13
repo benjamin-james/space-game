@@ -3,7 +3,11 @@
 
 #define SHIP_NAME_LENGTH 12
 
+#include <stdlib.h> //For rand()
+
 #include "item.h"
+#include "shield.h"
+#include "weapon.h"
 
 /*
  * All the basic information and statistics on ships.
@@ -17,8 +21,8 @@ struct ship {
 
 	//The ship's inventory
 	struct item engine;
-	struct item weapon;
-	struct item shield;
+	struct weapon weapon;
+	struct shield shield;
 	struct item radar;
 
 	//Sum of all system's power <= energy <= maxEnergy
@@ -41,6 +45,8 @@ int calc_shield_strength(struct ship);
 int calc_move_range (struct ship);
 
 int calc_dist (struct ship thisShip, struct ship otherShip);
-int calc_dmg (struct ship thisShip, struct ship otherShip);
+int calc_dmg (struct ship thisShip, struct ship otherShip, short manualFire);
+double calc_hit_chance (struct ship thisShip, struct ship otherShip, short manualFire);
+int handle_attack (struct ship *thisShip, struct ship *otherShip, short manualFire);
 
 #endif

@@ -45,6 +45,46 @@ int calc_dist (struct ship thisShip, struct ship otherShip) {
  * Does not actually deal the damage.
  * May need rebalancing.
  */
-int calc_dmg (struct ship thisShip, struct ship otherShip) {
-	return calc_attack(thisShip) - calc_shield_strength(otherShip);
+int calc_dmg (struct ship thisShip, struct ship otherShip, short manualFire) {
+	if(manualFire == 1) {
+		int avgDmg = calc_attack(thisShip) - calc_shield_strength(otherShip);
+		return (rand() * 0.4 * avgDmg) + (0.85 * avgDmg);
+	} else
+		return calc_attack(thisShip) - calc_shield_strength(otherShip);
+}
+
+/*
+ * Returns the percentage chance of thisShip hitting otherShip.
+ * Depends on the distance and the engine power of the otherShip.
+ * All the numbers may need to be tweaked. They are currently balanced around:
+ * Manual: distance = 1 : chance = 1.0 :: distance = 10 : chance = 0.25
+ * Auto:   distance = 1 : chance = 1.0 :: distance = 10 : chance = 0.75
+ */
+double calc_hit_chance (struct ship thisShip, struct ship otherShip, short manualFire) {
+	if(manualFire == 1)
+		return (-0.083 * calc_dist(thisShip, otherShip) + 1.083) - (0.05 * (otherShip.enginePower - (otherShip.maxEnergy / 4))) + (0.025 * thisShip.weapon.accuracy);
+	else
+		return (-0.028 * calc_dist(thisShip, otherShip) + 1.028) - (0.025 * (otherShip.enginePower - (otherShip.maxEnergy / 4))) + (0.025 * thisShip.weapon.accuracy);
+}
+
+/*
+ * Takes two ship structs, calculates and deals damage from thisShip to otherShip, and returns resulting ship health.
+ * Will not return negative numbers as health.
+ * Returns -1 if a miss.
+ */
+int handle_attack (struct ship *thisShip, struct ship *otherShip, short manualFire) {
+	if(rand() > calc_hit_chance(*thisShip, *otherShip, manualFire)) //If miss
+		return -1;
+
+	otherShip->shield.currentStrength -= calc_dmg(*thisShip, *otherShip, manualFire);
+
+	if(otherShip->shield.currentStrength < 0) {
+		otherShip->health += otherShip->shield.currentStrength;
+		otherShip->shield.currentStrength = 0;
+
+		if(otherShip->health < 0)
+			otherShip->health = 0;
+	}
+
+	return otherShip->health;
 }
