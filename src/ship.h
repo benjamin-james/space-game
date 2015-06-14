@@ -33,9 +33,11 @@ struct ship {
 	int shieldPower;
 	int radarPower;
 
+	int maxHealth;
 	int health;
 
 	int kills;
+	int level;
 	int exp;
 };
 
@@ -44,6 +46,7 @@ int calc_attack (struct ship);
 int calc_shield_strength(struct ship);
 int calc_move_range (struct ship);
 
+int calc_exp (struct ship thisShip, struct ship otherShip);
 int calc_dist (struct ship thisShip, struct ship otherShip);
 int calc_dmg (struct ship thisShip, struct ship otherShip, short manualFire);
 double calc_hit_chance (struct ship thisShip, struct ship otherShip, short manualFire);

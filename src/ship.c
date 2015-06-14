@@ -28,8 +28,20 @@ int calc_shield_strength (struct ship thisShip) {
  * Returns the max move range in tiles that the ship can move in a single turn.
  * May need rebalancing.
  */
-int calc_move_range(struct ship thisShip) {
+int calc_move_range (struct ship thisShip) {
 	return thisShip.engine.defaultStrength + (thisShip.enginePower - (thisShip.maxEnergy / 4));
+}
+
+/*
+ * Calculates the experience awarded to thisShip after successfully destroying otherShip.
+ */
+int calc_exp (struct ship thisShip, struct ship otherShip) {
+	if(otherShip.level > thisShip.level + 1)
+		return 45;
+	if(thisShip.level > otherShip.level + 1)
+		return 3;
+
+	return (0.105) * ((thisShip.level - otherShip.level) * 100 + thisShip.exp - otherShip.exp + 200) + 3;
 }
 
 /*
@@ -54,27 +66,29 @@ int calc_dist (struct ship thisShip, struct ship otherShip) {
  * May need rebalancing.
  */
 int calc_dmg (struct ship thisShip, struct ship otherShip, short manualFire) {
-	int avgDmg = calc_attack(thisShip) - calc_shield_strength(otherShip);
+	int avgDmg = calc_attack(thisShip) - calc_shield_strength(otherShip) / 4;
 	if(avgDmg < 0)
 		return 0;
 	if(manualFire == 1)
-		return (rand() * 0.4 * avgDmg) + (0.85 * avgDmg);
+		return (((double)rand() / RAND_MAX) * 0.75  * avgDmg) + avgDmg;
 	else
-		return calc_attack(thisShip) - calc_shield_strength(otherShip);
+		return avgDmg;
 }
 
 /*
  * Returns the percentage chance of thisShip hitting otherShip.
  * Depends on the distance and the engine power of the otherShip.
  * All the numbers may need to be tweaked. They are currently balanced around:
- * Manual: distance = 1 : chance = 1.0 :: distance = 10 : chance = 0.25
- * Auto:   distance = 1 : chance = 1.0 :: distance = 10 : chance = 0.75
+ * Manual: distance = 1 : chance = 1.0 :: distance = 11 : chance = 0.65
+ *         y - 1.0 = (-0.035)(x - 1)
+ * Auto:   distance = 1 : chance = 1.0 :: distance = 11 : chance = 0.85
+ *         y - 1.0 = (-0.015)(x - 1)
  */
 double calc_hit_chance (struct ship thisShip, struct ship otherShip, short manualFire) {
 	if(manualFire == 1)
-		return (-0.083 * calc_dist(thisShip, otherShip) + 1.083) - (0.05 * (otherShip.enginePower - (otherShip.maxEnergy / 4))) + (0.025 * thisShip.weapon.accuracy);
+		return (-0.035 * calc_dist(thisShip, otherShip) + 1.035) - (0.05 * (otherShip.enginePower - (otherShip.maxEnergy / 4))) + (0.025 * thisShip.weapon.accuracy);
 	else
-		return (-0.028 * calc_dist(thisShip, otherShip) + 1.028) - (0.025 * (otherShip.enginePower - (otherShip.maxEnergy / 4))) + (0.025 * thisShip.weapon.accuracy);
+		return (-0.015 * calc_dist(thisShip, otherShip) + 1.015) - (0.025 * (otherShip.enginePower - (otherShip.maxEnergy / 4))) + (0.025 * thisShip.weapon.accuracy);
 }
 
 /*
@@ -94,6 +108,16 @@ int handle_attack (struct ship *thisShip, struct ship *otherShip, short manualFi
 
 		if(otherShip->health < 0)
 			otherShip->health = 0;
+
+		otherShip->energy = (int)(((double)otherShip->health / otherShip->maxHealth) * otherShip->maxEnergy);
+	}
+
+	thisShip->kills++;
+	thisShip->exp += calc_exp(*thisShip, *otherShip);
+
+	if(thisShip->exp >= 100) {
+		thisShip->exp -= 100;
+		thisShip->level++;
 	}
 
 	return otherShip->health;
