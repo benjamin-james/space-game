@@ -25,20 +25,18 @@ struct ship {
 	struct shield shield;
 	struct item radar;
 
-	//Sum of all system's power <= energy <= maxEnergy
-	int maxEnergy;
-	int energy;
+	//Sum of all system's power <= currentHealth <= maxHealth
 	int enginePower;
 	int weaponPower;
 	int shieldPower;
 	int radarPower;
 
 	int maxHealth;
-	int health;
+	int currentHealth;
 
 	int kills;
 	int level;
-	int exp;
+	int exp; //Maxes out at 100
 };
 
 int calc_radar_range (struct ship);
@@ -50,6 +48,7 @@ int calc_exp (struct ship thisShip, struct ship otherShip);
 int calc_dist (struct ship thisShip, struct ship otherShip);
 int calc_dmg (struct ship thisShip, struct ship otherShip, short manualFire);
 double calc_hit_chance (struct ship thisShip, struct ship otherShip, short manualFire);
+void realloc_energy (struct ship *thisShip);
 int handle_attack (struct ship *thisShip, struct ship *otherShip, short manualFire);
 
 #endif

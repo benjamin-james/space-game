@@ -5,7 +5,7 @@
  * Needs item implementation.
  */
 int calc_radar_range (struct ship thisShip) {
-	return thisShip.radar.defaultStrength + (thisShip.radarPower - (thisShip.maxEnergy / 4));
+	return thisShip.radar.defaultStrength + (thisShip.radarPower - (thisShip.maxHealth / 4));
 }
 
 /*
@@ -13,7 +13,7 @@ int calc_radar_range (struct ship thisShip) {
  * Depends upon the equipped weapon and the weapon power.
  */
 int calc_attack (struct ship thisShip) {
-	return thisShip.weapon.defaultStrength + (thisShip.weaponPower - (thisShip.maxEnergy / 4));
+	return thisShip.weapon.defaultStrength + (thisShip.weaponPower - (thisShip.maxHealth / 4));
 }
 
 /*
@@ -21,7 +21,7 @@ int calc_attack (struct ship thisShip) {
  * Depends upon the equipped shield and shield power.
  */
 int calc_shield_strength (struct ship thisShip) {
-	return thisShip.shield.defaultStrength + (thisShip.shieldPower - (thisShip.maxEnergy / 4));
+	return thisShip.shield.defaultStrength + (thisShip.shieldPower - (thisShip.maxHealth / 4));
 }
 
 /*
@@ -29,7 +29,7 @@ int calc_shield_strength (struct ship thisShip) {
  * May need rebalancing.
  */
 int calc_move_range (struct ship thisShip) {
-	return thisShip.engine.defaultStrength + (thisShip.enginePower - (thisShip.maxEnergy / 4));
+	return thisShip.engine.defaultStrength + (thisShip.enginePower - (thisShip.maxHealth / 4));
 }
 
 /*
@@ -86,9 +86,56 @@ int calc_dmg (struct ship thisShip, struct ship otherShip, short manualFire) {
  */
 double calc_hit_chance (struct ship thisShip, struct ship otherShip, short manualFire) {
 	if(manualFire == 1)
-		return (-0.035 * calc_dist(thisShip, otherShip) + 1.035) - (0.05 * (otherShip.enginePower - (otherShip.maxEnergy / 4))) + (0.025 * thisShip.weapon.accuracy);
+		return (-0.035 * calc_dist(thisShip, otherShip) + 1.035)
+			- (0.05 * (otherShip.enginePower - (otherShip.maxHealth / 4)))
+			+ (0.025 * thisShip.weapon.accuracy);
 	else
-		return (-0.015 * calc_dist(thisShip, otherShip) + 1.015) - (0.025 * (otherShip.enginePower - (otherShip.maxEnergy / 4))) + (0.025 * thisShip.weapon.accuracy);
+		return (-0.015 * calc_dist(thisShip, otherShip) + 1.015)
+			- (0.025 * (otherShip.enginePower - (otherShip.maxHealth / 4)))
+			+ (0.025 * thisShip.weapon.accuracy);
+}
+
+/*
+ * Checks to see if total allocated power > currentHealth.
+ * If so, lessens the power of the highest powered system.
+ * If there is a tie, it reduces power in: weapon -> radar -> engine -> shield.
+ * Ends when allocated power <= currentHealth.
+ */
+void realloc_energy (struct ship *thisShip) {
+	while(thisShip->enginePower + thisShip->weaponPower + thisShip->shieldPower
+		+ thisShip->radarPower > thisShip->currentHealth) {
+		short maxType = 0; //Used to hold which will system will be cut
+		short max = thisShip->shieldPower; //Used to hold the max power
+
+		if(thisShip->enginePower >= max) {
+			maxType = 1;
+			max = thisShip->enginePower;
+		}
+
+		if(thisShip->radarPower >= max) {
+			maxType = 2;
+			max = thisShip->radarPower;
+		}
+
+		if(thisShip->weaponPower >= max) {
+			maxType = 3;
+		}
+
+		switch(maxType) {
+		case 0:
+			thisShip->shieldPower--;
+			break;
+		case 1:
+			thisShip->enginePower--;
+			break;
+		case 2:
+			thisShip->radarPower--;
+			break;
+		case 3:
+			thisShip->weaponPower--;
+			break;
+		}
+	}
 }
 
 /*
@@ -103,13 +150,13 @@ int handle_attack (struct ship *thisShip, struct ship *otherShip, short manualFi
 	otherShip->shield.currentStrength -= calc_dmg(*thisShip, *otherShip, manualFire);
 
 	if(otherShip->shield.currentStrength < 0) {
-		otherShip->health += otherShip->shield.currentStrength;
+		otherShip->currentHealth += otherShip->shield.currentStrength;
 		otherShip->shield.currentStrength = 0;
 
-		if(otherShip->health < 0)
-			otherShip->health = 0;
+		if(otherShip->currentHealth < 0)
+			otherShip->currentHealth = 0;
 
-		otherShip->energy = (int)(((double)otherShip->health / otherShip->maxHealth) * otherShip->maxEnergy);
+		realloc_energy(otherShip);
 	}
 
 	thisShip->kills++;
@@ -120,5 +167,5 @@ int handle_attack (struct ship *thisShip, struct ship *otherShip, short manualFi
 		thisShip->level++;
 	}
 
-	return otherShip->health;
+	return otherShip->currentHealth;
 }
