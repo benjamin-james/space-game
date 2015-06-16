@@ -66,11 +66,11 @@ int calc_dist (struct ship thisShip, struct ship otherShip) {
  * May need rebalancing.
  */
 int calc_dmg (struct ship thisShip, struct ship otherShip, short manualFire) {
-	int avgDmg = calc_attack(thisShip) - calc_shield_strength(otherShip) / 4;
+	int avgDmg = calc_attack(thisShip) - calc_shield_strength(otherShip);
 	if(avgDmg < 0)
 		return 0;
 	if(manualFire == 1)
-		return (((double)rand() / RAND_MAX) * 0.75  * avgDmg) + avgDmg;
+		return (((double)rand() / RAND_MAX) * 0.65  * avgDmg) + avgDmg;
 	else
 		return avgDmg;
 }
@@ -97,31 +97,37 @@ double calc_hit_chance (struct ship thisShip, struct ship otherShip, short manua
 
 /*
  * Checks to see if total allocated power > currentHealth.
- * If so, lessens the power of the highest powered system.
+ * If so, lessens the power of the lowest powered system.
  * If there is a tie, it reduces power in: weapon -> radar -> engine -> shield.
  * Ends when allocated power <= currentHealth.
  */
 void realloc_energy (struct ship *thisShip) {
 	while(thisShip->enginePower + thisShip->weaponPower + thisShip->shieldPower
 		+ thisShip->radarPower > thisShip->currentHealth) {
-		short maxType = 0; //Used to hold which will system will be cut
-		short max = thisShip->shieldPower; //Used to hold the max power
+		short minType = -1; //Used to hold which will system will be cut
+		short min = 1000; //Used to hold the min power
 
-		if(thisShip->enginePower >= max) {
-			maxType = 1;
-			max = thisShip->enginePower;
+		if(thisShip->shieldPower <= min && thisShip->shieldPower != 0) {
+			minType = 0;
+			min = thisShip->shieldPower;
+		}
+		if(thisShip->enginePower <= min && thisShip->enginePower != 0) {
+			minType = 1;
+			min = thisShip->enginePower;
 		}
 
-		if(thisShip->radarPower >= max) {
-			maxType = 2;
-			max = thisShip->radarPower;
+		if(thisShip->radarPower <= min && thisShip->radarPower != 0) {
+			minType = 2;
+			min = thisShip->radarPower;
 		}
 
-		if(thisShip->weaponPower >= max) {
-			maxType = 3;
+		if(thisShip->weaponPower <= min && thisShip->weaponPower != 0) {
+			minType = 3;
 		}
 
-		switch(maxType) {
+		switch(minType) {
+		case -1:
+			break;
 		case 0:
 			thisShip->shieldPower--;
 			break;
