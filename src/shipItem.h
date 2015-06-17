@@ -1,14 +1,14 @@
-#ifndef SHIELD_H
-#define SHIELD_H
+#ifndef SHIP_ITEM_H
+#define SHIP_ITEM_H
 
-#include "item.h" //For constants
+#define ITEM_NAME_LENGTH 12
+#define ITEM_DESCRIPTION_LENGTH 50
 
-struct shield {
+struct shipItem {
 	char name[ITEM_NAME_LENGTH];
 	char description[ITEM_DESCRIPTION_LENGTH];
 
 	int defaultStrength;
-	int currentStrength;
 
 	double price;
 };

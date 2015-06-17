@@ -1,9 +1,9 @@
-#ifndef WEAPON_H
-#define WEAPON_H
+#ifndef SHIP_WEAPON_H
+#define SHIP_WEAPON_H
 
-#include "item.h" //For constants
+#include "shipItem.h" //For constants
 
-struct weapon {
+struct shipWeapon {
 	char name[ITEM_NAME_LENGTH];
 	char description[ITEM_DESCRIPTION_LENGTH];
 

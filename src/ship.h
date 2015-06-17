@@ -5,25 +5,26 @@
 
 #include <stdlib.h> //For rand()
 
-#include "item.h"
-#include "shield.h"
-#include "weapon.h"
+#include "carrier.h"
+#include "coordinate.h"
+#include "shipItem.h"
+#include "shipShield.h"
+#include "shipWeapon.h"
 
 /*
  * All the basic information and statistics on ships.
  * Also needs inventory implementation.
  */
 struct ship {
+	struct coordinate coord;
+
 	char name[SHIP_NAME_LENGTH];
 
-	int x;
-	int y;
-
 	//The ship's inventory
-	struct item engine;
-	struct weapon weapon;
-	struct shield shield;
-	struct item radar;
+	struct shipItem engine;
+	struct shipWeapon weapon;
+	struct shipShield shield;
+	struct shipItem radar;
 
 	//Sum of all system's power <= currentHealth <= maxHealth
 	int enginePower;
@@ -39,16 +40,25 @@ struct ship {
 	int exp; //Maxes out at 100
 };
 
-int calc_radar_range (struct ship);
-int calc_attack (struct ship);
-int calc_shield_strength(struct ship);
-int calc_move_range (struct ship);
-
+int calc_radar_range (struct ship thisShip);
+int calc_attack (struct ship thisShip);
+int calc_shield_strength(struct ship thisShip);
+int calc_move_range (struct ship thisShip);
 int calc_exp (struct ship thisShip, struct ship otherShip);
-int calc_dist (struct ship thisShip, struct ship otherShip);
-int calc_dmg (struct ship thisShip, struct ship otherShip, short manualFire);
-double calc_hit_chance (struct ship thisShip, struct ship otherShip, short manualFire);
 void realloc_energy (struct ship *thisShip);
-int handle_attack (struct ship *thisShip, struct ship *otherShip, short manualFire);
+
+int calc_dmg_vs_ship (struct ship thisShip, struct ship otherShip, short manualFire);
+int calc_dmg_vs_carrier (struct ship thisShip, short manualFire);
+
+double calc_hit_chance_vs_ship (struct ship thisShip, struct ship otherShip, short manualFire);
+double calc_hit_chance_vs_system (struct ship thisShip, short manualFire);
+
+int attack_ship (struct ship *thisShip, struct ship *otherShip, short manualFire);
+int attack_carrier (struct ship *thisShip, struct carrier *otherCarrier, short manualFire);
+int attack_engine (struct ship *thisShip, struct carrierEngine *otherEngine);
+int attack_shield (struct ship *thisShip, struct carrierShield *otherShield);
+int attack_artillery (struct ship *thisShip, struct carrierArtillery *otherArtillery);
+int attack_turret (struct ship *thisShip, struct carrierTurret *otherTurret);
+int attack_hangar (struct ship *thisShip, struct carrierHangar *otherHangar);
 
 #endif

@@ -45,27 +45,11 @@ int calc_exp (struct ship thisShip, struct ship otherShip) {
 }
 
 /*
- * Return the distance in tiles between two ships.
- * This will mostly be used in hit chance calculations.
- */
-int calc_dist (struct ship thisShip, struct ship otherShip) {
-	int x = thisShip.x - otherShip.x;
-	int y = thisShip.y - otherShip.y;
-
-	if(x < 0)
-		x = -x;
-	if(y < 0)
-		y = -y;
-
-	return x + y;
-}
-
-/*
  * Return the damage inflicted upon the other ship.
  * Does not actually deal the damage.
  * May need rebalancing.
  */
-int calc_dmg (struct ship thisShip, struct ship otherShip, short manualFire) {
+int calc_dmg_vs_ship (struct ship thisShip, struct ship otherShip, short manualFire) {
 	int avgDmg = calc_attack(thisShip) - calc_shield_strength(otherShip);
 	if(avgDmg < 0)
 		return 0;
@@ -84,13 +68,13 @@ int calc_dmg (struct ship thisShip, struct ship otherShip, short manualFire) {
  * Auto:   distance = 1 : chance = 1.0 :: distance = 11 : chance = 0.85
  *         y - 1.0 = (-0.015)(x - 1)
  */
-double calc_hit_chance (struct ship thisShip, struct ship otherShip, short manualFire) {
+double calc_hit_chance_vs_ship (struct ship thisShip, struct ship otherShip, short manualFire) {
 	if(manualFire == 1)
-		return (-0.035 * calc_dist(thisShip, otherShip) + 1.035)
+		return (-0.035 * calc_dist(thisShip.coord, otherShip.coord) + 1.035)
 			- (0.05 * (otherShip.enginePower - (otherShip.maxHealth / 4)))
 			+ (0.025 * thisShip.weapon.accuracy);
 	else
-		return (-0.015 * calc_dist(thisShip, otherShip) + 1.015)
+		return (-0.015 * calc_dist(thisShip.coord, otherShip.coord) + 1.015)
 			- (0.025 * (otherShip.enginePower - (otherShip.maxHealth / 4)))
 			+ (0.025 * thisShip.weapon.accuracy);
 }
@@ -149,11 +133,11 @@ void realloc_energy (struct ship *thisShip) {
  * Will not return negative numbers as health.
  * Returns -1 if a miss.
  */
-int handle_attack (struct ship *thisShip, struct ship *otherShip, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance(*thisShip, *otherShip, manualFire)) //If miss
+int attack_ship (struct ship *thisShip, struct ship *otherShip, short manualFire) {
+	if((double)rand() / RAND_MAX > calc_hit_chance_vs_ship(*thisShip, *otherShip, manualFire)) //If miss
 		return -1;
 
-	otherShip->shield.currentStrength -= calc_dmg(*thisShip, *otherShip, manualFire);
+	otherShip->shield.currentStrength -= calc_dmg_vs_ship(*thisShip, *otherShip, manualFire);
 
 	if(otherShip->shield.currentStrength < 0) {
 		otherShip->currentHealth += otherShip->shield.currentStrength;
