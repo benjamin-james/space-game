@@ -12,7 +12,7 @@ int calc_radar_range (struct ship thisShip) {
  * Returns the attack power of the ship.
  * Depends upon the equipped weapon and the weapon power.
  */
-int calc_attack (struct ship thisShip) {
+int calc_attack_ship (struct ship thisShip) {
 	return thisShip.weapon.defaultStrength + (thisShip.weaponPower - (thisShip.maxHealth / 4));
 }
 
@@ -99,7 +99,7 @@ void realloc_energy (struct ship *thisShip) {
  * May need rebalancing.
  */
 int calc_dmg_vs_ship (struct ship thisShip, struct ship otherShip, short manualFire) {
-	int avgDmg = calc_attack(thisShip) - calc_shield_strength(otherShip);
+	int avgDmg = calc_attack_ship(thisShip) - calc_shield_strength(otherShip);
 	if(avgDmg < 0)
 		return 0;
 	if(manualFire == 1)
@@ -114,14 +114,14 @@ int calc_dmg_vs_ship (struct ship thisShip, struct ship otherShip, short manualF
  */
 int calc_dmg_vs_carrier (struct ship thisShip, short manualFire) {
 	if(manualFire == 1)
-		return (((double)rand() / RAND_MAX) * 0.65 + 1) * calc_attack(thisShip) / 1.5;
+		return (((double)rand() / RAND_MAX) * 0.65 + 1) * calc_attack_ship(thisShip) / 1.5;
 	else
-		return calc_attack(thisShip) / 1.5;
+		return calc_attack_ship(thisShip) / 1.5;
 }
 
 /*
  * Returns the percentage chance of thisShip hitting otherShip.
- * Depends on the distance and the engine power of the otherShip.
+ * Depends on the distance and the engine power of the otherShip as well as thisShip's weapon accuracy.
  * All the numbers may need to be tweaked. They are currently balanced around:
  * Manual: distance = 1 : chance = 1.0 :: distance = 11 : chance = 0.65
  *         y - 1.0 = (-0.035)(x - 1)
@@ -143,17 +143,17 @@ double calc_hit_chance_vs_ship (struct ship thisShip, struct ship otherShip, sho
  * Returns the percentage chance of thisShip hitting a carrier subsystem at coord.
  * Depends on the distance away from the target.
  * Currently balanced around:
- * Manual: distance = 1 : chance = 1.0 :: distance = 11 : chance = 0.65
- *         y - 1.0 = (-0.035)(x - 1)
- * Auto:   distance = 1 : chance = 1.0 :: distance = 11 : chance = 0.85
- *         y - 1.0 = (-0.015)(x - 1)
+ * Manual: distance = 1 : chance = 1.0 :: distance = 11 : chance = 0.75
+ *         y - 1.0 = (-0.025)(x - 1)
+ * Auto:   distance = 1 : chance = 1.0 :: distance = 11 : chance = 0.90
+ *         y - 1.0 = (-0.010)(x - 1)
  */
 double calc_hit_chance_vs_carrier (struct ship thisShip, struct coordinate coord, short manualFire) {
 	if(manualFire == 1)
-		return (-0.035 * calc_dist(thisShip.coord, coord) + 1.035)
+		return (-0.025 * calc_dist(thisShip.coord, coord) + 1.025)
 			+ (0.025 * thisShip.weapon.accuracy);
 	else
-		return (-0.015 * calc_dist(thisShip.coord, coord) + 1.015)
+		return (-0.010 * calc_dist(thisShip.coord, coord) + 1.010)
 			+ (0.025 * thisShip.weapon.accuracy);
 }
 

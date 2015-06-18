@@ -41,7 +41,7 @@ struct ship {
 };
 
 int calc_radar_range (struct ship thisShip);
-int calc_attack (struct ship thisShip);
+int calc_attack_ship (struct ship thisShip);
 int calc_shield_strength(struct ship thisShip);
 int calc_move_range (struct ship thisShip);
 int calc_exp (struct ship thisShip, struct ship otherShip);
