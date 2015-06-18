@@ -1,3 +1,3 @@
-bin_PROGRAMS = space-game
-space_game_SOURCES = main.c game.c game.h draw.c event.c
-space_game_CFLAGS = -g -pedantic -ansi -Wall -O2 -std=gnu99
+bin_PROGRAMS = space-game shipTester
+space_game_SOURCES = main.c game.c game.h draw.c event.c event.h
+shipTester_SOURCES = shipTester.c ship.c ship.h shipItem.h shipShield.h shipWeapon.h coordinate.h
