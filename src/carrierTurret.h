@@ -16,6 +16,7 @@ struct carrierTurret {
 	int range;
 	int strength;
 	int accuracy;
+	short manualFire;
 
 	double price;
 };

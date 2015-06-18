@@ -14,6 +14,8 @@ struct carrierArtillery {
 	int currentHealth;
 
 	int accuracy;
+	int strength;
+	short manualFire;
 
 	double price;
 };

@@ -51,7 +51,7 @@ int calc_dmg_vs_ship (struct ship thisShip, struct ship otherShip, short manualF
 int calc_dmg_vs_carrier (struct ship thisShip, short manualFire);
 
 double calc_hit_chance_vs_ship (struct ship thisShip, struct ship otherShip, short manualFire);
-double calc_hit_chance_vs_system (struct ship thisShip, short manualFire);
+double calc_hit_chance_vs_carrier (struct ship thisShip, struct coordinate coord, short manualFire);
 
 int attack_ship (struct ship *thisShip, struct ship *otherShip, short manualFire);
 int attack_carrier (struct ship *thisShip, struct carrier *otherCarrier, short manualFire);
