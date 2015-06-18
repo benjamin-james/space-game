@@ -195,10 +195,10 @@ int attack_ship (struct ship *thisShip, struct ship *otherShip, short manualFire
  * Returns a -1 if a miss.
  */
 int attack_carrier (struct ship *thisShip, struct carrier *otherCarrier, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, *otherCarrier, manualFire)) //If miss
+	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherCarrier->coord, manualFire)) //If miss
 		return -1;
 
-	otherCarrier->currentHealth -= calc_dmg_vs_carrier(*thisShip, *otherCarrier, manualFire);
+	otherCarrier->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
 
 	if(otherCarrier->currentHealth < 0) {
 		otherCarrier->currentHealth = 0;
@@ -221,10 +221,10 @@ int attack_carrier (struct ship *thisShip, struct carrier *otherCarrier, short m
  * Returns a -1 if a miss.
  */
 int attack_engine (struct ship *thisShip, struct carrierEngine *otherEngine, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, *otherEngine, manualFire)) //If miss
+	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherEngine->coord, manualFire)) //If miss
 		return -1;
 
-	otherEngine->currentHealth -= calc_dmg_vs_carrier(*thisShip, *otherEngine, manualFire);
+	otherEngine->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
 
 	if(otherEngine->currentHealth < 0) {
 		otherEngine->currentHealth = 0;
@@ -247,10 +247,10 @@ int attack_engine (struct ship *thisShip, struct carrierEngine *otherEngine, sho
  * Returns a -1 if a miss.
  */
 int attack_shield (struct ship *thisShip, struct carrierShield *otherShield, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, *otherShield, manualFire)) //If miss
+	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherShield->coord, manualFire)) //If miss
 		return -1;
 
-	otherShield->currentHealth -= calc_dmg_vs_carrier(*thisShip, *otherShield, manualFire);
+	otherShield->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
 
 	if(otherShield->currentHealth < 0) {
 		otherShield->currentHealth = 0;
@@ -273,10 +273,10 @@ int attack_shield (struct ship *thisShip, struct carrierShield *otherShield, sho
  * Returns a -1 if a miss.
  */
 int attack_artillery (struct ship *thisShip, struct carrierArtillery *otherArtillery, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, *otherArtillery, manualFire)) //If miss
+	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherArtillery->coord, manualFire)) //If miss
 		return -1;
 
-	otherArtillery->currentHealth -= calc_dmg_vs_carrier(*thisShip, *otherArtillery, manualFire);
+	otherArtillery->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
 
 	if(otherArtillery->currentHealth < 0) {
 		otherArtillery->currentHealth = 0;
@@ -299,10 +299,10 @@ int attack_artillery (struct ship *thisShip, struct carrierArtillery *otherArtil
  * Returns a -1 if a miss.
  */
 int attack_turret (struct ship *thisShip, struct carrierTurret *otherTurret, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, *otherTurret, manualFire)) //If miss
+	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherTurret->coord, manualFire)) //If miss
 		return -1;
 
-	otherTurret->currentHealth -= calc_dmg_vs_carrier(*thisShip, *otherTurret, manualFire);
+	otherTurret->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
 
 	if(otherTurret->currentHealth < 0) {
 		otherTurret->currentHealth = 0;
@@ -325,10 +325,10 @@ int attack_turret (struct ship *thisShip, struct carrierTurret *otherTurret, sho
  * Returns a -1 if a miss.
  */
 int attack_hangar (struct ship *thisShip, struct carrierHangar *otherHangar, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, *otherHangar, manualFire)) //If miss
+	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherHangar->coord, manualFire)) //If miss
 		return -1;
 
-	otherHangar->currentHealth -= calc_dmg_vs_carrier(*thisShip, *otherHangar, manualFire);
+	otherHangar->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
 
 	if(otherHangar->currentHealth < 0) {
 		otherHangar->currentHealth = 0;

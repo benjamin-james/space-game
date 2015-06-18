@@ -55,10 +55,10 @@ double calc_hit_chance_vs_carrier (struct ship thisShip, struct coordinate coord
 
 int attack_ship (struct ship *thisShip, struct ship *otherShip, short manualFire);
 int attack_carrier (struct ship *thisShip, struct carrier *otherCarrier, short manualFire);
-int attack_engine (struct ship *thisShip, struct carrierEngine *otherEngine);
-int attack_shield (struct ship *thisShip, struct carrierShield *otherShield);
-int attack_artillery (struct ship *thisShip, struct carrierArtillery *otherArtillery);
-int attack_turret (struct ship *thisShip, struct carrierTurret *otherTurret);
-int attack_hangar (struct ship *thisShip, struct carrierHangar *otherHangar);
+int attack_engine (struct ship *thisShip, struct carrierEngine *otherEngine, short manualFire);
+int attack_shield (struct ship *thisShip, struct carrierShield *otherShield, short manualFire);
+int attack_artillery (struct ship *thisShip, struct carrierArtillery *otherArtillery, short manualFire);
+int attack_turret (struct ship *thisShip, struct carrierTurret *otherTurret, short manualFire);
+int attack_hangar (struct ship *thisShip, struct carrierHangar *otherHangar, short manualFire);
 
 #endif

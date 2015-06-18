@@ -9,13 +9,13 @@
 struct carrierHangar {
 	struct coordinate coord;
 
-	struct ship[MAX_SHIPS] fleet;
+	struct ship fleet[MAX_SHIPS];
 
 	int maxHealth;
 	int currentHealth;
 };
 
 void enter_hangar (struct carrierHangar *thisHangar, struct ship *thisShip);
-ship leave_hangar (struct *thisHangar, short index);
+struct ship leave_hangar (struct carrierHangar *thisHangar, short index);
 
 #endif

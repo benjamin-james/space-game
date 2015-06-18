@@ -8,6 +8,7 @@
 #include "carrierShield.h"
 #include "carrierArtillery.h"
 #include "carrierTurret.h"
+#include "carrierHangar.h"
 
 struct carrier {
 	//Coordinates for the center of the ship. All other subsystem coordinates will be set relative to these
