@@ -1,6 +1,35 @@
 #include "ship.h"
 
 /*
+ * Returns a new ship struct with the same parameters as the passed ship.
+ */
+struct ship copy_ship (struct ship ship) {
+	struct ship retShip;
+
+	for (short ct = 0; ct < SHIP_NAME_LENGTH; ct++)
+		retShip.name[ct] = ship.name[ct];
+
+	retShip.engine = copy_ship_item(ship.engine);
+	retShip.weapon = copy_ship_weapon(ship.weapon);
+	retShip.shield = copy_ship_shield(ship.shield);
+	retShip.radar = copy_ship_item(ship.radar);
+
+	retShip.enginePower = ship.enginePower;
+	retShip.weaponPower = ship.weaponPower;
+	retShip.shieldPower = ship.shieldPower;
+	retShip.radarPower = ship.radarPower;
+
+	retShip.maxHealth = ship.maxHealth;
+	retShip.currentHealth = ship.currentHealth;
+
+	retShip.kills = ship.kills;
+	retShip.level = ship.level;
+	retShip.exp = ship.exp;
+
+	return retShip;
+}
+
+/*
  * Returns the range in tiles that can be seen by this ship.
  * Needs item implementation.
  */

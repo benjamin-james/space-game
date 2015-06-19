@@ -1,5 +1,26 @@
 #include "carrier.h"
 
+struct carrier copy_carrier (struct carrier carrier) {
+	struct carrier retCarrier;
+
+	retCarrier.coord = copy_coordinate(carrier.coord);
+
+	for(short ct = 0; ct < CARRIER_NAME_LENGTH; ct++)
+		retCarrier.name[ct] = carrier.name[ct];
+
+	retCarrier.maxHealth = carrier.maxHealth;
+	retCarrier.currentHealth = carrier.currentHealth;
+
+	retCarrier.hangar = copy_carrier_hanger(carrier.hangar);
+
+	retCarrier.engine = copy_carrier_engine(carrier.engine);
+	retCarrier.artillery = copy_carrier_artillery(carrier.artillery);
+	retCarrier.turret = copy_carrier_turret(carrier.turret);
+	retCarrier.shield = copy_carrier_shield(carrier.shield);
+
+	return retCarrier;
+}
+
 /*
  * Returns the base attack damage from the ship's artillery.
  */

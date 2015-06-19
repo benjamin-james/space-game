@@ -16,4 +16,22 @@ struct carrierShield {
 	double price;
 };
 
+struct carrierShield copy_carrier_shield (struct carrierShield shield) {
+	struct carrierShield retShield;
+
+	retShield.coord = copy_coordinate(shield.coord);
+
+	for(short ct = 0; ct < ITEM_NAME_LENGTH; ct++)
+		retShield.name[ct] = shield.name[ct];
+	for(short ct = 0; ct < ITEM_DESCRIPTION_LENGTH; ct++)
+		retShield.description[ct] = shield.description[ct];
+
+	retShield.maxHealth = shield.maxHealth;
+	retShield.currentHealth = shield.currentHealth;
+
+	retShield.price = shield.price;
+
+	return retShield;
+}
+
 #endif

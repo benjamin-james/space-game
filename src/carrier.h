@@ -19,8 +19,7 @@ struct carrier {
 	int maxHealth;
 	int currentHealth;
 
-	int maxHangarHealth;
-	int currentHangarHealth;
+	struct carrierHangar hangar;
 
 	//The carrier's inventory
 	struct carrierEngine engine;
@@ -28,6 +27,8 @@ struct carrier {
 	struct carrierTurret turret;
 	struct carrierShield shield;
 };
+
+struct carrier copy_carrier (struct carrier carrier);
 
 int calc_attack_artillery (struct carrierArtillery artillery);
 int calc_attack_turret (struct carrierTurret turret);

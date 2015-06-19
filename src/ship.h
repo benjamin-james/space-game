@@ -40,6 +40,8 @@ struct ship {
 	int exp; //Maxes out at 100
 };
 
+struct ship copy_ship (struct ship ship);
+
 int calc_radar_range (struct ship thisShip);
 int calc_attack_ship (struct ship thisShip);
 int calc_shield_strength(struct ship thisShip);
