@@ -49,6 +49,17 @@ struct game_list {
 	size_t alloc, size;
 	int (*hash_func)(struct sc *s);
 };
+
+struct keymap {
+	SDL_Keycode quit;
+        SDL_Keycode pause;
+	SDL_Keycode zoom_in;
+	SDL_Keycode zoom_out;
+	SDL_Keycode scroll_left;
+        SDL_Keycode scroll_right;
+	SDL_Keycode scroll_up;
+	SDL_Keycode scroll_down;
+};
 /*
  * Once this modularization is sorted out,
  * the specific arguments can be figured out.
@@ -58,6 +69,8 @@ struct game_event {
 	void (*key_event)(struct game *g, SDL_Keycode key, Uint8 state);
 	void (*mouse_motion_event)(struct game *g, SDL_MouseMotionEvent e);
 	void (*mouse_button_event)(struct game *g, SDL_MouseButtonEvent e);
+
+	struct keymap map;
 };
 
 /*

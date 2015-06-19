@@ -14,20 +14,26 @@ void key_event(struct game *g, SDL_Keycode key, Uint8 state)
 	if (state == SDL_RELEASED)
 		return;
 	switch(key) {
-	case SDLK_ESCAPE:
-		g->info.running = 0;
-		break;
-	case SDLK_LEFT:
+	case g->event.map.scroll_left:
 		g->grid.cx--;
 		break;
-	case SDLK_UP:
+	case g->event.map.scroll_up:
 		g->grid.cy--;
 		break;
-	case SDLK_RIGHT:
+	case g->event.map.scroll_right:
 		g->grid.cx++;
 		break;
-	case SDLK_DOWN:
+	case g->event.map.scroll_down:
 		g->grid.cy++;
+		break;
+	case g->event.map.quit:
+		g->info.running = 0;
+		break;
+	case g->event.map.zoom_in:
+		g->zoom += 5;
+		break;
+	case g->event.map.zoom_out:
+		g->zoom -= 5;
 		break;
 	default:
 		break;

@@ -39,6 +39,15 @@ void game_init(struct game *g)
 	g->list.alloc = 100;
 	g->list.data = malloc(sizeof(struct sc) * g->list.alloc);
 	g->list.size = 0;
+
+	g->event.map.quit = SDLK_ESCAPE;
+	g->event.map.pause = SDLK_P;
+	g->event.map.zoom_in = SDLK_PLUS;
+	g->event.map.zoom_out = SDLK_MINUS;
+	g->event.map.scroll_left = SDLK_LEFT;
+	g->event.map.scroll_right = SDLK_RIGHT;
+	g->event.map.scroll_up = SDLK_UP;
+	g->event.map.scroll_down = SDLK_DOWN;
 }
 
 /*
