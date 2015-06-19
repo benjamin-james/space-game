@@ -14,6 +14,7 @@
  */
 void game_init(struct game *g)
 {
+	int i,j;
 	g->info.running = 1;
 	srand(time(0));
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -27,10 +28,9 @@ void game_init(struct game *g)
 	SDL_GetWindowSize(g->screen.window, &g->screen.width, &g->screen.height);
 	g->info.last_time = SDL_GetTicks();
 	g->grid.zoom = 100.0;
-	int i,j;
 	for (i = 0; i < GRID_WIDTH; i++) {
 		for (j = 0; j < GRID_HEIGHT; j++) {
-			g->grid.grid[i][j] = ((rand() % 0xFFFF) << 16) | (rand() % 0xFF << 8);
+			g->grid.data[i][j] = ((rand() % 0xFFFF) << 16) | (rand() % 0xFF << 8);
 		}
 	}
 	g->grid.cx = GRID_WIDTH / 2;

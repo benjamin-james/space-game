@@ -6,6 +6,7 @@
 
 #include <SDL2/SDL.h> /* alot of stuff */
 
+#include "core/entity.h"
 
 #define GRID_WIDTH 100
 #define GRID_HEIGHT 100

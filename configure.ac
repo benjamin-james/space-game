@@ -1,7 +1,7 @@
 AC_PREREQ([2.61])
 AC_INIT([space-game], [0.0.1], [benjamin-james@users.noreply.github.com])
-AC_CONFIG_SRCDIR([src/main.c])
-AM_INIT_AUTOMAKE
+AC_CONFIG_SRCDIR([src/core/game.c])
+AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.
@@ -20,5 +20,5 @@ AC_CHECK_LIB([m], [sqrt])
 # Checks for library functions.
 AC_CHECK_FUNCS([sqrt])
 
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
