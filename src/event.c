@@ -15,19 +15,19 @@ void key_event(struct game *g, SDL_Keycode key, Uint8 state)
 		return;
 	switch(key) {
 	case SDLK_ESCAPE:
-		g->running = 0;
+		g->info.running = 0;
 		break;
 	case SDLK_LEFT:
-		g->cx--;
+		g->grid.cx--;
 		break;
 	case SDLK_UP:
-		g->cy--;
+		g->grid.cy--;
 		break;
 	case SDLK_RIGHT:
-		g->cx++;
+		g->grid.cx++;
 		break;
 	case SDLK_DOWN:
-		g->cy++;
+		g->grid.cy++;
 		break;
 	default:
 		break;

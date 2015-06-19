@@ -14,27 +14,31 @@
  */
 void game_init(struct game *g)
 {
-	g->running = 1;
+	g->info.running = 1;
 	srand(time(0));
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 		error("SDL_Init failed: %s\n", SDL_GetError());
-	g->window = SDL_CreateWindow("Space Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_RESIZABLE);
-	if (!g->window)
+	g->screen.window = SDL_CreateWindow("Space Game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_RESIZABLE);
+	if (!g->screen.window)
 		error("Could not create window: %s\n", SDL_GetError());
-	g->renderer = SDL_CreateRenderer(g->window, -1, 0);
-	if (!g->renderer)
+	g->screen.renderer = SDL_CreateRenderer(g->screen.window, -1, 0);
+	if (!g->screen.renderer)
 		error("Could not create renderer: %s\n", SDL_GetError());
-	SDL_GetWindowSize(g->window, &g->width, &g->height);
-	g->last_time = SDL_GetTicks();
-	g->zoom = 100.0;
+	SDL_GetWindowSize(g->screen.window, &g->screen.width, &g->screen.height);
+	g->info.last_time = SDL_GetTicks();
+	g->grid.zoom = 100.0;
 	int i,j;
 	for (i = 0; i < GRID_WIDTH; i++) {
 		for (j = 0; j < GRID_HEIGHT; j++) {
-			g->grid[i][j] = ((rand() % 0xFFFF) << 16) | (rand() % 0xFF << 8);
+			g->grid.grid[i][j] = ((rand() % 0xFFFF) << 16) | (rand() % 0xFF << 8);
 		}
 	}
-	g->cx = GRID_WIDTH / 2;
-	g->cy = GRID_HEIGHT / 2;
+	g->grid.cx = GRID_WIDTH / 2;
+	g->grid.cy = GRID_HEIGHT / 2;
+
+	g->list.alloc = 100;
+	g->list.data = malloc(sizeof(struct sc) * g->list.alloc);
+	g->list.size = 0;
 }
 
 /*
@@ -47,14 +51,14 @@ void game_loop(struct game *g)
 	Uint32 current_time = SDL_GetTicks();
 	while (SDL_PollEvent(&e))
 		default_get_event(g, e);
-	g->update(g, current_time - g->last_time);
+	g->info.update(g, current_time - g->info.last_time);
 
-	SDL_SetRenderDrawColor(g->renderer, 0, 0, 0, 0xFF);
-	SDL_RenderClear(g->renderer);
-	g->render(g);
-	SDL_RenderPresent(g->renderer);
+	SDL_SetRenderDrawColor(g->screen.renderer, 0, 0, 0, 0xFF);
+	SDL_RenderClear(g->screen.renderer);
+	g->screen.render(g);
+	SDL_RenderPresent(g->screen.renderer);
 
-	g->last_time = current_time;
+	g->info.last_time = current_time;
 	SDL_Delay(50);
 }
 
@@ -64,8 +68,8 @@ void game_loop(struct game *g)
  */
 void game_destroy(struct game *g)
 {
-	SDL_DestroyRenderer(g->renderer);
-	SDL_DestroyWindow(g->window);
+	SDL_DestroyRenderer(g->screen.renderer);
+	SDL_DestroyWindow(g->screen.window);
 	SDL_Quit();
 }
 
@@ -81,29 +85,29 @@ void default_get_event(struct game *g, SDL_Event event)
 	case SDL_WINDOWEVENT:
 		switch (event.window.type) {
 		case SDL_WINDOWEVENT_CLOSE:
-			g->running = 0;
+			g->info.running = 0;
 			return;
 		case SDL_WINDOWEVENT_RESIZED:
-			SDL_GetWindowSize(g->window, &g->width, &g->height);
+			SDL_GetWindowSize(g->screen.window, &g->screen.width, &g->screen.height);
 			break;
 		}
 		break;
 	case SDL_MOUSEWHEEL:
 		debug("mouse wheel: %d\n", event.wheel.y);
-		g->zoom += 4*event.wheel.y;
+		g->grid.zoom += 4*event.wheel.y;
 		break;
 	case SDL_KEYDOWN:
-		g->key_event(g, event.key.keysym.sym, event.key.state);
+		g->event.key_event(g, event.key.keysym.sym, event.key.state);
 		break;
 	case SDL_MOUSEMOTION:
-		g->mouse_motion_event(g, event.motion);
+		g->event.mouse_motion_event(g, event.motion);
 		break;
 	case SDL_MOUSEBUTTONDOWN:
 	case SDL_MOUSEBUTTONUP:
-		g->mouse_button_event(g, event.button);
+		g->event.mouse_button_event(g, event.button);
 		break;
 	case SDL_QUIT:
-		g->running = 0;
+		g->info.running = 0;
 		break;
 	default:
 		break;
@@ -136,21 +140,21 @@ void default_update(struct game *g, Uint32 delta)
  */
 void game_set_render_func(struct game *g, render_func r)
 {
-	g->render = r;
+	g->screen.render = r;
 }
 void game_set_update_func(struct game *g, update_func u)
 {
-	g->update = u;
+	g->info.update = u;
 }
 void game_set_key_func(struct game *g, key_event_func k)
 {
-	g->key_event = k;
+	g->event.key_event = k;
 }
 void game_set_mouse_moved_func(struct game *g, mouse_moved_func m)
 {
-	g->mouse_motion_event = m;
+	g->event.mouse_motion_event = m;
 }
 void game_set_mouse_clicked_func(struct game *g, mouse_clicked_func m)
 {
-	g->mouse_button_event = m;
+	g->event.mouse_button_event = m;
 }

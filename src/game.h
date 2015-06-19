@@ -17,25 +17,70 @@
  * generic until things work.
  */
 
-struct game {
-	Uint8 state;
-	void *data;
-	int width, height;
-	volatile int running;
-	Uint32 last_time;
-
-	Uint32 grid[GRID_WIDTH][GRID_HEIGHT];
-	int cx, cy; /* current x and y of grid */
-	double zoom;
-	/* These should rarely be modified */
+/*
+ * The first element in each module
+ * is 'struct game', but it should
+ * really only be used to gain access
+ * to other needed modules.
+ */
+struct game_screen {
+	struct game *g;
 	SDL_Window *window;
+	int width, height;
 	SDL_Renderer *renderer;
-
 	void (*render)(struct game *g);
-	void (*update)(struct game *g, Uint32 delta);
+};
+
+/*
+ * As of right now, this serves
+ * as a buffer between the game objects
+ * and the actual screen functions.
+ */
+struct game_grid {
+	struct game *g;
+	Uint32 data[GRID_WIDTH][GRID_HEIGHT];
+	int cx, cy;
+	double zoom;
+};
+
+struct game_list {
+	struct sc *data;
+	size_t alloc, size;
+	int (*hash_func)(struct sc *s);
+};
+/*
+ * Once this modularization is sorted out,
+ * the specific arguments can be figured out.
+ */
+struct game_event {
+	struct game *g;
 	void (*key_event)(struct game *g, SDL_Keycode key, Uint8 state);
 	void (*mouse_motion_event)(struct game *g, SDL_MouseMotionEvent e);
 	void (*mouse_button_event)(struct game *g, SDL_MouseButtonEvent e);
+};
+
+/*
+ * Vital game information,
+ * in the future can contain
+ * mutexes, etc
+ */
+struct game_info {
+	struct game *g;
+	Uint8 state;
+	volatile int running;
+	Uint32 last_time;
+	void (*update)(struct game *g, Uint32 delta);
+};
+
+/*
+ * Alas, this doesn't look quite as messy anymore!
+ */
+struct game {
+	struct game_info info;
+	struct game_list list;
+	struct game_screen screen;
+	struct game_grid grid;
+	struct game_event event;
 };
 
 typedef void (*render_func)(struct game *g);

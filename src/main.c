@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 	game_set_key_func(&g, key_event);
 	game_set_mouse_moved_func(&g, mouse_moved);
 	game_set_mouse_clicked_func(&g, mouse_clicked);
-	while (g.running)
+	while (g.data.running)
 		game_loop(&g);
 	game_destroy(&g);
 	return 0;
@@ -32,6 +32,6 @@ int main(int argc, char **argv)
 
 void update(struct game *g, Uint32 delta)
 {
-	SDL_GetWindowSize(g->window, &g->width, &g->height);
+	SDL_GetWindowSize(g->scr.window, &g->scr.width, &g->scr.height);
 }
 
