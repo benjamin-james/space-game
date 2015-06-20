@@ -1,35 +1,6 @@
 #include "ship/ship.h"
 
 /*
- * Returns a new ship struct with the same parameters as the passed ship.
- */
-struct ship copy_ship (struct ship ship) {
-	struct ship retShip;
-
-	for (short ct = 0; ct < SHIP_NAME_LENGTH; ct++)
-		retShip.name[ct] = ship.name[ct];
-
-	retShip.engine = copy_ship_item(ship.engine);
-	retShip.weapon = copy_ship_weapon(ship.weapon);
-	retShip.shield = copy_ship_shield(ship.shield);
-	retShip.radar = copy_ship_item(ship.radar);
-
-	retShip.enginePower = ship.enginePower;
-	retShip.weaponPower = ship.weaponPower;
-	retShip.shieldPower = ship.shieldPower;
-	retShip.radarPower = ship.radarPower;
-
-	retShip.maxHealth = ship.maxHealth;
-	retShip.currentHealth = ship.currentHealth;
-
-	retShip.kills = ship.kills;
-	retShip.level = ship.level;
-	retShip.exp = ship.exp;
-
-	return retShip;
-}
-
-/*
  * Returns the range in tiles that can be seen by this ship.
  * Needs item implementation.
  */
@@ -42,7 +13,7 @@ int calc_radar_range (struct ship thisShip) {
  * Depends upon the equipped weapon and the weapon power.
  */
 int calc_attack_ship (struct ship thisShip) {
-	return thisShip.weapon.defaultStrength + (thisShip.weaponPower - (thisShip.maxHealth / 4));
+	return thisShip.weapon.super.defaultStrength + (thisShip.weaponPower - (thisShip.maxHealth / 4));
 }
 
 /*
@@ -50,7 +21,7 @@ int calc_attack_ship (struct ship thisShip) {
  * Depends upon the equipped shield and shield power.
  */
 int calc_shield_strength (struct ship thisShip) {
-	return thisShip.shield.defaultStrength + (thisShip.shieldPower - (thisShip.maxHealth / 4));
+	return thisShip.shield.super.defaultStrength + (thisShip.shieldPower - (thisShip.maxHealth / 4));
 }
 
 /*
@@ -245,18 +216,18 @@ int attack_carrier (struct ship *thisShip, struct carrier *otherCarrier, short m
 }
 
 /*
- * Takes a ship struct and an engine struct and deals damage from thisShip to otherEngine and returns the resulting engine health.
+ * Takes a ship struct and a carrierItem struct and deals damage from thisShip to otherEngine and returns the resulting engine health.
  * Will not return negative numbers as health.
  * Returns a -1 if a miss.
  */
-int attack_engine (struct ship *thisShip, struct carrierEngine *otherEngine, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherEngine->coord, manualFire)) //If miss
+int attack_carrier_item (struct ship *thisShip, struct carrierItem *otherItem, short manualFire) {
+	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherItem->coord, manualFire)) //If miss
 		return -1;
 
 	otherEngine->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
 
-	if(otherEngine->currentHealth < 0) {
-		otherEngine->currentHealth = 0;
+	if(otherItem->currentHealth < 0) {
+		otherItem->currentHealth = 0;
 
 		thisShip->kills++;
 		thisShip->exp += 50;
@@ -267,109 +238,5 @@ int attack_engine (struct ship *thisShip, struct carrierEngine *otherEngine, sho
 		}
 	}
 
-	return otherEngine->currentHealth;
-}
-
-/*
- * Takes a ship struct and a shield struct and deals damage from thisShip to otherShield and returns the resulting shield health.
- * Will not return negative numbers as health.
- * Returns a -1 if a miss.
- */
-int attack_shield (struct ship *thisShip, struct carrierShield *otherShield, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherShield->coord, manualFire)) //If miss
-		return -1;
-
-	otherShield->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
-
-	if(otherShield->currentHealth < 0) {
-		otherShield->currentHealth = 0;
-
-		thisShip->kills++;
-		thisShip->exp += 50;
-
-		if(thisShip->exp >= 100) {
-			thisShip->exp -= 100;
-			thisShip->level++;
-		}
-	}
-
-	return otherShield->currentHealth;
-}
-
-/*
- * Takes a ship struct and an artillery struct and deals damage from thisShip to otherArtillery and returns the resulting artillery health.
- * Will not return negative numbers as health.
- * Returns a -1 if a miss.
- */
-int attack_artillery (struct ship *thisShip, struct carrierArtillery *otherArtillery, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherArtillery->coord, manualFire)) //If miss
-		return -1;
-
-	otherArtillery->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
-
-	if(otherArtillery->currentHealth < 0) {
-		otherArtillery->currentHealth = 0;
-
-		thisShip->kills++;
-		thisShip->exp += 50;
-
-		if(thisShip->exp >= 100) {
-			thisShip->exp -= 100;
-			thisShip->level++;
-		}
-	}
-
-	return otherArtillery->currentHealth;
-}
-
-/*
- * Takes a ship struct and a turret struct and deals damage from thisShip to otherTurret and returns the resulting turret health.
- * Will not return negative numbers as health.
- * Returns a -1 if a miss.
- */
-int attack_turret (struct ship *thisShip, struct carrierTurret *otherTurret, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherTurret->coord, manualFire)) //If miss
-		return -1;
-
-	otherTurret->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
-
-	if(otherTurret->currentHealth < 0) {
-		otherTurret->currentHealth = 0;
-
-		thisShip->kills++;
-		thisShip->exp += 50;
-
-		if(thisShip->exp >= 100) {
-			thisShip->exp -= 100;
-			thisShip->level++;
-		}
-	}
-
-	return otherTurret->currentHealth;
-}
-
-/*
- * Takes a ship struct and a hangar struct and deals damage from thisShip to otherHangar and returns the resulting hangar health.
- * Will not return negative numbers as health.
- * Returns a -1 if a miss.
- */
-int attack_hangar (struct ship *thisShip, struct carrierHangar *otherHangar, short manualFire) {
-	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherHangar->coord, manualFire)) //If miss
-		return -1;
-
-	otherHangar->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
-
-	if(otherHangar->currentHealth < 0) {
-		otherHangar->currentHealth = 0;
-
-		thisShip->kills++;
-		thisShip->exp += 50;
-
-		if(thisShip->exp >= 100) {
-			thisShip->exp -= 100;
-			thisShip->level++;
-		}
-	}
-
-	return otherHangar->currentHealth;
+	return otherItem->currentHealth;
 }

@@ -15,8 +15,6 @@ struct carrierHangar {
 	int currentHealth;
 };
 
-struct carrierHangar copy_carrier_hangar(struct carrierHangar hangar);
-
 void enter_hangar (struct carrierHangar *thisHangar, struct ship thisShip);
 struct ship leave_hangar (struct carrierHangar *thisHangar, short index);
 

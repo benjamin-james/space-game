@@ -1,38 +1,17 @@
 #include "carrier/carrier.h"
 
-struct carrier copy_carrier (struct carrier carrier) {
-	struct carrier retCarrier;
-
-	retCarrier.coord = copy_coordinate(carrier.coord);
-
-	for(short ct = 0; ct < CARRIER_NAME_LENGTH; ct++)
-		retCarrier.name[ct] = carrier.name[ct];
-
-	retCarrier.maxHealth = carrier.maxHealth;
-	retCarrier.currentHealth = carrier.currentHealth;
-
-	retCarrier.hangar = copy_carrier_hanger(carrier.hangar);
-
-	retCarrier.engine = copy_carrier_engine(carrier.engine);
-	retCarrier.artillery = copy_carrier_artillery(carrier.artillery);
-	retCarrier.turret = copy_carrier_turret(carrier.turret);
-	retCarrier.shield = copy_carrier_shield(carrier.shield);
-
-	return retCarrier;
-}
-
 /*
  * Returns the base attack damage from the ship's artillery.
  */
 int calc_attack_artillery (struct carrierArtillery artillery) {
-	return artillery.strength * (artillery.currentHealth / artillery.maxHealth);
+	return artillery.strength * (artillery.super.currentHealth / artillery.super.maxHealth);
 }
 
 /*
  * Returns the base attack damage from the ship's turret.
  */
 int calc_attack_turret (struct carrierTurret turret) {
-	return turret.strength * (turret.currentHealth / turret.maxHealth);
+	return turret.strength * (turret.super.currentHealth / turret.super.maxHealth);
 }
 
 /*
@@ -81,11 +60,11 @@ int calc_dmg_artillery_to_carrier (struct carrierArtillery artillery, struct car
  */
 double calc_hit_chance_artillery_to_ship (struct carrierArtillery artillery, struct ship otherShip) {
 	if(artillery.manualFire == 1)
-		return (-0.050 * calc_dist(artillery.coord, otherShip.coord) + 1.050)
+		return (-0.050 * calc_dist(artillery.super.coord, otherShip.coord) + 1.050)
 			- (0.200 * (otherShip.enginePower - (otherShip.maxHealth / 4)))
 			+ (0.025 * artillery.accuracy);
 	else
-		return (-0.035 * calc_dist(artillery.coord, otherShip.coord) + 1.035)
+		return (-0.035 * calc_dist(artillery.super.coord, otherShip.coord) + 1.035)
 			- (0.150 * (otherShip.enginePower - (otherShip.maxHealth / 4)))
 			+ (0.025 * artillery.accuracy);
 }
@@ -101,11 +80,11 @@ double calc_hit_chance_artillery_to_ship (struct carrierArtillery artillery, str
  */
 double calc_hit_chance_turret_to_ship (struct carrierTurret turret, struct ship otherShip) {
 	if(turret.manualFire == 1)
-		return (-0.025 * calc_dist(turret.coord, otherShip.coord) + 1.025)
+		return (-0.025 * calc_dist(turret.super.coord, otherShip.coord) + 1.025)
 			- (0.025 * (otherShip.enginePower - (otherShip.maxHealth / 4)))
 			+ (0.025 * turret.accuracy);
 	else
-		return (-0.015 * calc_dist(turret.coord, otherShip.coord) + 1.015)
+		return (-0.015 * calc_dist(turret.super.coord, otherShip.coord) + 1.015)
 			- (0.010 * (otherShip.enginePower - (otherShip.maxHealth / 4)))
 			+ (0.025 * turret.accuracy);
 }
@@ -121,10 +100,10 @@ double calc_hit_chance_turret_to_ship (struct carrierTurret turret, struct ship 
  */
 double calc_hit_chance_artillery_to_carrier (struct carrierArtillery artillery, struct carrier otherCarrier) {
 	if(artillery.manualFire == 1)
-		return (-0.005 * calc_dist(artillery.coord, otherCarrier.coord) + 1.005)
+		return (-0.005 * calc_dist(artillery.super.coord, otherCarrier.coord) + 1.005)
 			+ (0.025 * artillery.accuracy);
 	else
-		return (-0.002 * calc_dist(artillery.coord, otherCarrier.coord) + 1.002)
+		return (-0.002 * calc_dist(artillery.super.coord, otherCarrier.coord) + 1.002)
 			+ (0.025 * artillery.accuracy);
 }
 

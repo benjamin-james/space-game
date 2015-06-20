@@ -5,7 +5,7 @@
 
 #include "ship/ship.h"
 #include "carrier/carrierEngine.h"
-#include "carrier/carrierShield.h"
+#include "carrier/carrierItem.h"
 #include "carrier/carrierArtillery.h"
 #include "carrier/carrierTurret.h"
 #include "carrier/carrierHangar.h"
@@ -25,7 +25,7 @@ struct carrier {
 	struct carrierEngine engine;
 	struct carrierArtillery artillery;
 	struct carrierTurret turret;
-	struct carrierShield shield;
+	struct carrierItem shield;
 };
 
 struct carrier copy_carrier (struct carrier carrier);

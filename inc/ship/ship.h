@@ -38,8 +38,6 @@ struct ship {
 	int exp; //Maxes out at 100
 };
 
-struct ship copy_ship (struct ship ship);
-
 int calc_radar_range (struct ship thisShip);
 int calc_attack_ship (struct ship thisShip);
 int calc_shield_strength(struct ship thisShip);
@@ -55,10 +53,6 @@ double calc_hit_chance_vs_carrier (struct ship thisShip, struct coordinate coord
 
 int attack_ship (struct ship *thisShip, struct ship *otherShip, short manualFire);
 int attack_carrier (struct ship *thisShip, struct carrier *otherCarrier, short manualFire);
-int attack_engine (struct ship *thisShip, struct carrierEngine *otherEngine, short manualFire);
-int attack_shield (struct ship *thisShip, struct carrierShield *otherShield, short manualFire);
-int attack_artillery (struct ship *thisShip, struct carrierArtillery *otherArtillery, short manualFire);
-int attack_turret (struct ship *thisShip, struct carrierTurret *otherTurret, short manualFire);
-int attack_hangar (struct ship *thisShip, struct carrierHangar *otherHangar, short manualFire);
+int attack_carrier_item (struct ship *thisShip, struct carrierItem *otherItem, short manualFire);
 
 #endif
