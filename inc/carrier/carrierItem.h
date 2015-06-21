@@ -2,18 +2,15 @@
 #define CARRIER_ITEM
 
 #include "core/coordinate.h"
-#include "ship/shipItem.h"
+#include "core/buyable.h"
 
 struct carrierItem {
 	struct coordinate coord;
 
-	char name[ITEM_NAME_LENGTH];
-	char description[ITEM_DESCRIPTION_LENGTH];
+	struct buyable super;
 
 	int maxHealth;
 	int currentHealth;
-
-	double price;
 };
 
 #endif
