@@ -13,31 +13,20 @@ void key_event(struct game *g, SDL_Keycode key, Uint8 state)
 {
 	if (state == SDL_RELEASED)
 		return;
-	switch(key) {
-	case g->event.map.scroll_left:
+	if (key == g->event.map.scroll_left)
 		g->grid.cx--;
-		break;
-	case g->event.map.scroll_up:
+	else if (key == g->event.map.scroll_up)
 		g->grid.cy--;
-		break;
-	case g->event.map.scroll_right:
+	else if (key == g->event.map.scroll_right)
 		g->grid.cx++;
-		break;
-	case g->event.map.scroll_down:
+	else if (key == g->event.map.scroll_down)
 		g->grid.cy++;
-		break;
-	case g->event.map.quit:
+	else if (key == g->event.map.quit)
 		g->info.running = 0;
-		break;
-	case g->event.map.zoom_in:
-		g->zoom += 5;
-		break;
-	case g->event.map.zoom_out:
-		g->zoom -= 5;
-		break;
-	default:
-		break;
-	}
+	else if (key == g->event.map.zoom_in)
+		g->grid.zoom += 5;
+	else if (key == g->event.map.zoom_out)
+		g->grid.zoom -= 5;
 }
 
 /*
@@ -45,7 +34,7 @@ void key_event(struct game *g, SDL_Keycode key, Uint8 state)
  */
 void mouse_moved(struct game *g, SDL_MouseMotionEvent e)
 {
-
+	debug("game: %p mouse moved %d by %d\n", g, e.x, e.y);
 }
 
 /*
@@ -53,5 +42,5 @@ void mouse_moved(struct game *g, SDL_MouseMotionEvent e)
  */
 void mouse_clicked(struct game *g, SDL_MouseButtonEvent e)
 {
-
+	debug("game: %p mouse clicked: %d\n", g, e.type == SDL_MOUSEBUTTONDOWN);
 }

@@ -13,7 +13,7 @@ void update(struct game *g, Uint32 delta);
 /*
  * The entry point
  */
-int main(int argc, char **argv)
+int main(void)
 {
 	struct game g;
 	game_init(&g);
@@ -32,5 +32,6 @@ int main(int argc, char **argv)
 void update(struct game *g, Uint32 delta)
 {
 	SDL_GetWindowSize(g->screen.window, &g->screen.width, &g->screen.height);
+	debug("delta: %ud", delta);
 }
 

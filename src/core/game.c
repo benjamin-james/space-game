@@ -41,7 +41,7 @@ void game_init(struct game *g)
 	g->list.size = 0;
 
 	g->event.map.quit = SDLK_ESCAPE;
-	g->event.map.pause = SDLK_P;
+	g->event.map.pause = SDLK_p;
 	g->event.map.zoom_in = SDLK_PLUS;
 	g->event.map.zoom_out = SDLK_MINUS;
 	g->event.map.scroll_left = SDLK_LEFT;
@@ -129,20 +129,20 @@ void default_get_event(struct game *g, SDL_Event event)
  * main render function but implemented
  * in another file.
  */
-void default_render(struct game *g)
+/*void default_render(struct game *g)
 {
-	/* DRAW STUFF */
-}
+
+}*/
 
 /*
  * Game logic such as physics, ai,
  * input checking, etc should be
  * processed here.
  */
-void default_update(struct game *g, Uint32 delta)
+/*void default_update(struct game *g, Uint32 delta)
 {
 
-}
+}*/
 
 /*
  * Simple set functions
