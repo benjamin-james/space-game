@@ -5,6 +5,7 @@
 
 struct shipItem {
 	struct buyable super;
+	void *sub;
 
 	int defaultStrength;
 };

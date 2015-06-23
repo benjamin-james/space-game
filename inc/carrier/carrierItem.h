@@ -8,6 +8,7 @@ struct carrierItem {
 	struct coordinate coord;
 
 	struct buyable super;
+	void *sub;
 
 	int maxHealth;
 	int currentHealth;

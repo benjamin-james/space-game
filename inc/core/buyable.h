@@ -9,6 +9,8 @@ struct buyable {
 	char description[DESCRIPTION_LENGTH];
 
 	double price;
+
+	void *sub;
 };
 
 #endif
