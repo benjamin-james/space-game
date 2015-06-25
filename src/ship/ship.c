@@ -156,7 +156,7 @@ double calc_hit_chance_vs_ship (struct ship thisShip, struct ship otherShip, sho
  * Auto:   distance = 1 : chance = 1.0 :: distance = 11 : chance = 0.90
  *         y - 1.0 = (-0.010)(x - 1)
  */
-double calc_hit_chance_vs_carrier (struct ship thisShip, struct coordinate coord, short manualFire) {
+double calc_hit_chance_vs_carrier (struct ship thisShip, struct pt coord, short manualFire) {
 	if(manualFire == 1)
 		return (-0.025 * calc_dist(thisShip.coord, coord) + 1.025)
 			+ (0.025 * thisShip.weapon.accuracy)

@@ -12,7 +12,7 @@
 
 struct carrier {
 	//Coordinates for the center of the ship. All other subsystem coordinates will be set relative to these
-	struct coordinate coord;
+	struct pt coord;
 
 	char name[CARRIER_NAME_LENGTH];
 	int team;

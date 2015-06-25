@@ -4,7 +4,7 @@
 #define SHIP_NAME_LENGTH 12
 
 #include "carrier/carrier.h"
-#include "core/coordinate.h"
+#include "core/pt.h"
 #include "ship/shipItem.h"
 #include "ship/shipShield.h"
 #include "ship/shipWeapon.h"
@@ -15,7 +15,7 @@
  * Also needs inventory implementation.
  */
 struct ship {
-	struct coordinate coord;
+	struct pt coord;
 
 	//The ship's stats
 	struct stats autoStats;
@@ -55,7 +55,7 @@ int calc_dmg_vs_ship (struct ship thisShip, struct ship otherShip, short manualF
 int calc_dmg_vs_carrier (struct ship thisShip, short manualFire);
 
 double calc_hit_chance_vs_ship (struct ship thisShip, struct ship otherShip, short manualFire);
-double calc_hit_chance_vs_carrier (struct ship thisShip, struct coordinate coord, short manualFire);
+double calc_hit_chance_vs_carrier (struct ship thisShip, struct pt coord, short manualFire);
 
 int attack_ship (struct ship *thisShip, struct ship *otherShip, short manualFire);
 int attack_carrier (struct ship *thisShip, struct carrier *otherCarrier, short manualFire);
