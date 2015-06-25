@@ -3,11 +3,11 @@
 
 #define MAX_SHIPS 12 //Totally arbitrary at this point
 
-#include "core/coordinate.h"
 #include "ship/ship.h"
+#include "core/pt.h"
 
 struct carrierHangar {
-	struct coordinate coord;
+	struct pt coord;
 
 	struct ship *fleet[MAX_SHIPS];
 

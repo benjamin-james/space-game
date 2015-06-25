@@ -1,11 +1,6 @@
 #ifndef PT_H
 #define PT_H
 
-/*
- * Note: Can we change this to
- * be a shorter name like 'struct pt'
- * or 'struct vec2'?
- */
 struct pt {
 	int x;
 	int y;
@@ -23,10 +18,10 @@ struct pt {
  * point.arr[1] -= 2;
  * would leave it at { 7, 1 }
  */
-union pt {
+/*union pt {
 	struct { int x, int y };
 	int arr[2];
-};
+	};*/
 
 int calc_dist (struct pt thisPt, struct pt otherPt);
 

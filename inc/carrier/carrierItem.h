@@ -1,11 +1,11 @@
 #ifndef CARRIER_ITEM
 #define CARRIER_ITEM
 
-#include "core/coordinate.h"
+#include "core/pt.h"
 #include "core/buyable.h"
 
 struct carrierItem {
-	struct coordinate coord;
+	struct pt coord;
 
 	struct buyable super;
 	void *sub;

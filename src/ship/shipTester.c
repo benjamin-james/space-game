@@ -10,15 +10,15 @@ int main(void) {
 	struct ship alpha;
 	struct ship beta;
 
-	alpha.x = 0;
-	alpha.y = 0;
+	alpha.coord.x = 0;
+	alpha.coord.y = 0;
 
 	alpha.engine.defaultStrength = 5;
 
-	alpha.weapon.defaultStrength = 4;
+	alpha.weapon.super.defaultStrength = 4;
 	alpha.weapon.accuracy = 4;
 
-	alpha.shield.defaultStrength = 2;
+	alpha.shield.super.defaultStrength = 2;
 	alpha.shield.currentStrength = 2;
 
 	alpha.enginePower = 3;
@@ -28,15 +28,15 @@ int main(void) {
 
 	alpha.currentHealth = 10;
 
-	beta.x = 5;
-	beta.y = 5;
+	beta.coord.x = 5;
+	beta.coord.y = 5;
 
 	beta.engine.defaultStrength = 5;
 
-	beta.weapon.defaultStrength = 3;
+	beta.weapon.super.defaultStrength = 3;
 	beta.weapon.accuracy = 4;
 
-	beta.shield.defaultStrength = 5;
+	beta.shield.super.defaultStrength = 5;
 	beta.shield.currentStrength = 5;
 
 	beta.enginePower = 3;
@@ -65,23 +65,23 @@ int main(void) {
 
 	for(short ct = 0; ct < 1000; ct++) {
 		beta.currentHealth = beta.maxHealth;
-		beta.shield.currentStrength = beta.shield.defaultStrength;
+		beta.shield.currentStrength = beta.shield.super.defaultStrength;
 		beta.enginePower = 3;
 		beta.weaponPower = 5;
 		beta.radarPower = 3;
 		beta.shieldPower = 5;
 
-		while(handle_attack(&alpha, &beta, 1) != 0)
+		while(attack_ship(&alpha, &beta, 1) != 0)
 			manualCt++;
 
 		beta.currentHealth = beta.maxHealth;
-		beta.shield.currentStrength = beta.shield.defaultStrength;
+		beta.shield.currentStrength = beta.shield.super.defaultStrength;
 		beta.enginePower = 3;
 		beta.weaponPower = 5;
 		beta.radarPower = 3;
 		beta.shieldPower = 5;
 
-		while(handle_attack(&alpha, &beta, 0) != 0)
+		while(attack_ship(&alpha, &beta, 0) != 0)
 			autoCt++;
 	}
 
