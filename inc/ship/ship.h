@@ -8,6 +8,7 @@
 #include "ship/shipItem.h"
 #include "ship/shipShield.h"
 #include "ship/shipWeapon.h"
+#include "ship/stats.h"
 
 /*
  * All the basic information and statistics on ships.
@@ -16,7 +17,19 @@
 struct ship {
 	struct coordinate coord;
 
+	//The ship's stats
+	struct stats autoStats;
+	struct stats manualStats;
+
+	int maxHealth;
+	int currentHealth;
+
+	int evasion; //Bonus chance to dodge attacks
+	int defensiveness; //Reduces hull damage
+	double perception; //Increases radar range by a percentage
+
 	char name[SHIP_NAME_LENGTH];
+	int team;
 
 	//The ship's inventory
 	struct shipItem engine;
@@ -29,13 +42,6 @@ struct ship {
 	int weaponPower;
 	int shieldPower;
 	int radarPower;
-
-	int maxHealth;
-	int currentHealth;
-
-	int kills;
-	int level;
-	int exp; //Maxes out at 100
 };
 
 int calc_radar_range (struct ship thisShip);

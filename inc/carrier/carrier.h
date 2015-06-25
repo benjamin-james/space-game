@@ -15,6 +15,7 @@ struct carrier {
 	struct coordinate coord;
 
 	char name[CARRIER_NAME_LENGTH];
+	int team;
 
 	int maxHealth;
 	int currentHealth;

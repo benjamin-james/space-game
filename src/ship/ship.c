@@ -2,10 +2,14 @@
 
 /*
  * Returns the range in tiles that can be seen by this ship.
- * Needs item implementation.
+ * There's probably already a function to round instead of truncate.
  */
 int calc_radar_range (struct ship thisShip) {
-	return thisShip.radar.defaultStrength + (thisShip.radarPower - (thisShip.maxHealth / 4));
+	double holder = thisShip.perception * (thisShip.radar.defaultStrength + (thisShip.radarPower - (thisShip.maxHealth / 4)));
+	if(holder - (int)holder >= 0.50)
+		return (int)holder + 1;
+	else
+		return (int)holder;
 }
 
 /*
@@ -36,12 +40,12 @@ int calc_move_range (struct ship thisShip) {
  * Calculates the experience awarded to thisShip after successfully destroying otherShip.
  */
 int calc_exp (struct ship thisShip, struct ship otherShip) {
-	if(otherShip.level > thisShip.level + 1)
+	if(otherShip.autoStats.level + otherShip.manualStats.level > thisShip.manualStats.level + thisShip.autoStats.level + 1)
 		return 45;
-	if(thisShip.level > otherShip.level + 1)
+	if(thisShip.manualStats.level + thisShip.autoStats.level > otherShip.manualStats.level + otherShip.autoStats.level + 1)
 		return 3;
 
-	return (0.105) * ((thisShip.level - otherShip.level) * 100 + thisShip.exp - otherShip.exp + 200) + 3;
+	return (0.105) * ((thisShip.manualStats.level + thisShip.autoStats.level- otherShip.manualStats.level - otherShip.autoStats.level) * 100 + thisShip.manualStats.exp  + thisShip.autoStats.exp - otherShip.manualStats.exp - otherShip.autoStats.exp + 200) + 3;
 }
 
 /*
@@ -103,9 +107,9 @@ int calc_dmg_vs_ship (struct ship thisShip, struct ship otherShip, short manualF
 	if(avgDmg < 0)
 		return 0;
 	if(manualFire == 1)
-		return (((double)rand() / RAND_MAX) * 0.65  * avgDmg) + avgDmg;
+		return (((double)rand() / RAND_MAX) * 0.65 + 1) * avgDmg + thisShip.manualStats.attack;
 	else
-		return avgDmg;
+		return avgDmg + thisShip.autoStats.attack;
 }
 
 /*
@@ -114,14 +118,14 @@ int calc_dmg_vs_ship (struct ship thisShip, struct ship otherShip, short manualF
  */
 int calc_dmg_vs_carrier (struct ship thisShip, short manualFire) {
 	if(manualFire == 1)
-		return (((double)rand() / RAND_MAX) * 0.65 + 1) * calc_attack_ship(thisShip) / 1.5;
+		return (((double)rand() / RAND_MAX) * 0.65 + 1) * calc_attack_ship(thisShip) / 1.5 + thisShip.manualStats.attack;
 	else
-		return calc_attack_ship(thisShip) / 1.5;
+		return calc_attack_ship(thisShip) / 1.5 + thisShip.autoStats.attack;
 }
 
 /*
  * Returns the percentage chance of thisShip hitting otherShip.
- * Depends on the distance and the engine power of the otherShip as well as thisShip's weapon accuracy.
+ * Depends on the distance and the engine power of the otherShip as well as thisShip's weapon accuracy and accuracy stat.
  * All the numbers may need to be tweaked. They are currently balanced around:
  * Manual: distance = 1 : chance = 1.0 :: distance = 11 : chance = 0.65
  *         y - 1.0 = (-0.035)(x - 1)
@@ -132,11 +136,15 @@ double calc_hit_chance_vs_ship (struct ship thisShip, struct ship otherShip, sho
 	if(manualFire == 1)
 		return (-0.035 * calc_dist(thisShip.coord, otherShip.coord) + 1.035)
 			- (0.05 * (otherShip.enginePower - (otherShip.maxHealth / 4)))
-			+ (0.025 * thisShip.weapon.accuracy);
+			- (0.01 * otherShip.evasion)
+			+ (0.025 * thisShip.weapon.accuracy)
+			+ (0.01 * thisShip.manualStats.accuracy);
 	else
 		return (-0.015 * calc_dist(thisShip.coord, otherShip.coord) + 1.015)
 			- (0.025 * (otherShip.enginePower - (otherShip.maxHealth / 4)))
-			+ (0.025 * thisShip.weapon.accuracy);
+			- (0.01 * otherShip.evasion)
+			+ (0.025 * thisShip.weapon.accuracy)
+			+ (0.01 * thisShip.autoStats.accuracy);
 }
 
 /*
@@ -151,10 +159,12 @@ double calc_hit_chance_vs_ship (struct ship thisShip, struct ship otherShip, sho
 double calc_hit_chance_vs_carrier (struct ship thisShip, struct coordinate coord, short manualFire) {
 	if(manualFire == 1)
 		return (-0.025 * calc_dist(thisShip.coord, coord) + 1.025)
-			+ (0.025 * thisShip.weapon.accuracy);
+			+ (0.025 * thisShip.weapon.accuracy)
+			+ (0.01 * thisShip.manualStats.accuracy);
 	else
 		return (-0.010 * calc_dist(thisShip.coord, coord) + 1.010)
-			+ (0.025 * thisShip.weapon.accuracy);
+			+ (0.025 * thisShip.weapon.accuracy)
+			+ (0.01 * thisShip.autoStats.accuracy);
 }
 
 /*
@@ -169,7 +179,7 @@ int attack_ship (struct ship *thisShip, struct ship *otherShip, short manualFire
 	otherShip->shield.currentStrength -= calc_dmg_vs_ship(*thisShip, *otherShip, manualFire);
 
 	if(otherShip->shield.currentStrength < 0) {
-		otherShip->currentHealth += otherShip->shield.currentStrength;
+		otherShip->currentHealth += otherShip->shield.currentStrength * ((100 - otherShip->defensiveness) / 100);
 		otherShip->shield.currentStrength = 0;
 
 		if(otherShip->currentHealth < 0)
@@ -178,12 +188,12 @@ int attack_ship (struct ship *thisShip, struct ship *otherShip, short manualFire
 		realloc_energy(otherShip);
 	}
 
-	thisShip->kills++;
-	thisShip->exp += calc_exp(*thisShip, *otherShip);
-
-	if(thisShip->exp >= 100) {
-		thisShip->exp -= 100;
-		thisShip->level++;
+	if(manualFire == 1) {
+		addExp(&thisShip->manualStats, calc_exp(*thisShip, *otherShip));
+		thisShip->manualStats.kills++;
+	} else {
+		addExp(&thisShip->autoStats, calc_exp(*thisShip, *otherShip));
+		thisShip->autoStats.kills++;
 	}
 
 	return otherShip->currentHealth;
@@ -203,13 +213,10 @@ int attack_carrier (struct ship *thisShip, struct carrier *otherCarrier, short m
 	if(otherCarrier->currentHealth < 0) {
 		otherCarrier->currentHealth = 0;
 
-		thisShip->kills++;
-		thisShip->exp += 50;
-
-		if(thisShip->exp >= 100) {
-			thisShip->exp -= 100;
-			thisShip->level++;
-		}
+		if(manualFire == 1)
+			addExp(*thisShip->manualStats, 50);
+		else
+			addExp(*thisShip->autoStats, 50);
 	}
 
 	return otherCarrier->currentHealth;
@@ -229,13 +236,10 @@ int attack_carrier_item (struct ship *thisShip, struct carrierItem *otherItem, s
 	if(otherItem->currentHealth < 0) {
 		otherItem->currentHealth = 0;
 
-		thisShip->kills++;
-		thisShip->exp += 50;
-
-		if(thisShip->exp >= 100) {
-			thisShip->exp -= 100;
-			thisShip->level++;
-		}
+		if(manualFire == 1)
+			addExp(*thisShip->manualStats, 50);
+		else
+			addExp(*thisShip->autoStats, 50);
 	}
 
 	return otherItem->currentHealth;

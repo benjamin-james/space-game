@@ -21,18 +21,18 @@
    - [ ] Create mouse-driven mouse interface
 
 * TODO Combat
-** Units [0/7]
+** Units [6/10]
    = [ ] Figure out an objective for each battle
-   - [ ] Design coordinate system for use of determining position and distance from other units
-   - [ ] Bind struct of stats to each unit
-   - [ ] Bind an small inventory to each unit
+   - [X] Design coordinate system for use of determining position and distance from other units
+   - [X] Bind struct of stats to each unit
+   - [X] Bind a small inventory to each unit
    - [ ] Increase these stats upon a level up
-   - [ ] Calculate damage and hit chance given two units and the distance between them for both manual and auto attack
-   - [ ] Calculate experience values given two units
+   - [X] Calculate damage and hit chance given two units and the distance between them for both manual and auto attack
+   - [X] Calculate experience values given two units
    - [ ] Calculate and show possible moving distance
    - [ ] Figure out vision range given all allied units
    - [ ] Balance the giant carrier ships
-   - [ ] Create and implement the carrier with seperately disableable subsystems (weapons, shields, engines...)
+   - [X] Create and implement the carrier with seperately disableable subsystems (weapons, shields, engines...)
 
 ** Map [0/3]
    - [ ] Design necessary maps
