@@ -108,8 +108,8 @@ int calc_dmg_vs_ship (struct ship thisShip, struct ship otherShip, short manualF
 		return 0;
 	if(manualFire == 1)
 		return (((double)rand() / RAND_MAX) * 0.65 + 1) * avgDmg + thisShip.manualStats.attack;
-	else
-		return avgDmg + thisShip.autoStats.attack;
+	//If auto:
+	return avgDmg + thisShip.autoStats.attack;
 }
 
 /*
@@ -119,8 +119,8 @@ int calc_dmg_vs_ship (struct ship thisShip, struct ship otherShip, short manualF
 int calc_dmg_vs_carrier (struct ship thisShip, short manualFire) {
 	if(manualFire == 1)
 		return (((double)rand() / RAND_MAX) * 0.65 + 1) * calc_attack_ship(thisShip) / 1.5 + thisShip.manualStats.attack;
-	else
-		return calc_attack_ship(thisShip) / 1.5 + thisShip.autoStats.attack;
+	//If auto:
+	return calc_attack_ship(thisShip) / 1.5 + thisShip.autoStats.attack;
 }
 
 /*
@@ -214,9 +214,9 @@ int attack_carrier (struct ship *thisShip, struct carrier *otherCarrier, short m
 		otherCarrier->currentHealth = 0;
 
 		if(manualFire == 1)
-			addExp(*thisShip->manualStats, 50);
+			addExp(&thisShip->manualStats, 50);
 		else
-			addExp(*thisShip->autoStats, 50);
+			addExp(&thisShip->autoStats, 50);
 	}
 
 	return otherCarrier->currentHealth;
@@ -231,15 +231,15 @@ int attack_carrier_item (struct ship *thisShip, struct carrierItem *otherItem, s
 	if((double)rand() / RAND_MAX > calc_hit_chance_vs_carrier(*thisShip, otherItem->coord, manualFire)) //If miss
 		return -1;
 
-	otherEngine->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
+	otherItem->currentHealth -= calc_dmg_vs_carrier(*thisShip, manualFire);
 
 	if(otherItem->currentHealth < 0) {
 		otherItem->currentHealth = 0;
 
 		if(manualFire == 1)
-			addExp(*thisShip->manualStats, 50);
+			addExp(&thisShip->manualStats, 50);
 		else
-			addExp(*thisShip->autoStats, 50);
+			addExp(&thisShip->autoStats, 50);
 	}
 
 	return otherItem->currentHealth;

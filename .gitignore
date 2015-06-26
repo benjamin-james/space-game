@@ -13,6 +13,7 @@ Makefile.in
 /Makefile
 /missing
 /space-game
+*/collisions
 /stamp-h1
 */space-game
 *.deps

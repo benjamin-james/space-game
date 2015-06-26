@@ -2,7 +2,6 @@
 This game is a strategy RPG set in space, featuring strategic and challenging battles taking place across the reaches of the galaxy. Designed and constructed as a side summer project.
 Note that as this is still in development, any listed features may be removed, altered, or replaced with different mechanics.
 
-
 * Mechanics
 ** Battles
 Control a small fleet of space fighters alongside a massive carrier in turn-based fights with an opposing force of equal or greater might. Train and upgrade your force as they gain

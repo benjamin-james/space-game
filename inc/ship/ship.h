@@ -3,6 +3,7 @@
 
 #define SHIP_NAME_LENGTH 12
 
+#include <stdlib.h>
 #include "carrier/carrier.h"
 #include "core/pt.h"
 #include "ship/shipItem.h"
