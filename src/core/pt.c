@@ -4,7 +4,7 @@
  * Return the distance in tiles between two ships.
  * This will mostly be used in hit chance calculations.
  */
-int calc_dist (struct pt thisCoord, struct pt otherCoord) {
+int calc_dist (const struct pt thisCoord, const struct pt otherCoord) {
 	int x  = thisCoord.x - otherCoord.x;
 	int y = thisCoord.y - otherCoord.y;
 

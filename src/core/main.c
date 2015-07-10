@@ -32,6 +32,6 @@ int main(void)
 void update(struct game *g, Uint32 delta)
 {
 	SDL_GetWindowSize(g->screen.window, &g->screen.width, &g->screen.height);
-	debug("delta: %ud", delta);
+	debug("delta: %u\n", delta);
 }
 

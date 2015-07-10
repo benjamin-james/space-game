@@ -5,7 +5,7 @@
 
 int hash(struct pt a);
 
-int get_tile(struct tile *tiles, size_t num_tiles, struct pt point, struct tile *ret);
+int get_tile(const struct tile *tiles, struct pt point, struct tile *ret);
 
-int set_tile(struct tile *tiles, size_t num_tiles, struct tile *t);
+int set_tile(struct tile *tiles, const struct tile *t);
 #endif

@@ -23,6 +23,6 @@ struct pt {
 	int arr[2];
 	};*/
 
-int calc_dist (struct pt thisPt, struct pt otherPt);
+int calc_dist (const struct pt thisPt, const struct pt otherPt);
 
 #endif

@@ -15,15 +15,5 @@ struct tile {
 	struct carrier *carrier;
 };
 
-/*
- * Makes an empty tile at given coordinates.
- */
-void init_tile(struct tile *tile, int x, int y) {
-    tile.pt.x = x;
-    tile.pt.y = y;
-
-    ship = null;
-    carrier = null;
-    type = 0;
-}
+void init_tile(struct tile *tile, int x, int y);
 #endif

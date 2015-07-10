@@ -1,5 +1,5 @@
 #include "ship/ship.h"
-
+#include "ship/stats.h"
 /*
  * Returns the range in tiles that can be seen by this ship.
  * There's probably already a function to round instead of truncate.
